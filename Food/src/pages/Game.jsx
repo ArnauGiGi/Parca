@@ -5,6 +5,7 @@ import Question from '../components/Question';
 
 export default function Game() {
   const { code } = useParams();
+  console.log(localStorage);
   const username = localStorage.getItem('username');
   const isHost = localStorage.getItem(`host_${code}`) === 'true';
 
@@ -55,6 +56,7 @@ export default function Game() {
       <h2 className="text-2xl">Sala: {code}</h2>
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}
       <ul className="space-y-2">
+        {console.log('👥 Jugadores:', players)}
         {players.map((p, i) => (
           <li
             key={i}
