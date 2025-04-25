@@ -28,25 +28,53 @@ const io = new Server(server, {
 // ----------------------
 // HANDLERS DE SOCKET.IO
 // ----------------------
+const rooms = {};
+
 io.on('connection', socket => {
-  console.log(`🔌 Usuario conectado: ${socket.id}`);
-
-  // 1) Crear sala (host)
-  socket.on('createRoom', ({ gameId, code }) => {
+  socket.on('createRoom', ({ code, username }) => {
+    rooms[code] = {
+      host: socket.id,
+      players: [{ socketId: socket.id, username, ready: false }]
+    };
     socket.join(code);
-    console.log(`Host unido a sala ${code}`);
-    io.to(code).emit('roomCreated', { gameId, code });
+    io.to(code).emit('updatePlayers', rooms[code].players);
   });
 
-  // 2) Unirse a sala (jugador)
   socket.on('joinRoom', ({ code, username }) => {
+    if (!rooms[code]) {
+      socket.emit('errorMessage', 'Sala no existe');
+      return;
+    }
+    rooms[code].players.push({ socketId: socket.id, username, ready: false });
     socket.join(code);
-    console.log(`${username} se unió a sala ${code}`);
-    io.to(code).emit('playerJoined', { username });
+    io.to(code).emit('updatePlayers', rooms[code].players);
   });
 
-  // 3) Iniciar partida
+ // Cuando un jugador marca ready/unready
+  socket.on('playerReady', ({ code, username }) => {
+   const room = rooms[code];
+   if (!room) return;
+   // Toggle ready
+   room.players = room.players.map(p =>
+     p.username === username ? { ...p, ready: !p.ready } : p
+   );
+   io.to(code).emit('updatePlayers', room.players);
+  });
+
   socket.on('startGame', ({ code }) => {
+   const room = rooms[code];
+   if (!room) return;
+   // Solo el host puede iniciar
+   if (socket.id !== room.host) {
+     socket.emit('errorMessage', 'Solo el creador puede iniciar la partida');
+     return;
+   }
+   // Comprobar que todos están ready
+   const allReady = room.players.every(p => p.ready);
+   if (!allReady) {
+     socket.emit('errorMessage', 'Todos los jugadores deben estar preparados');
+     return;
+   }
     io.to(code).emit('gameStarted');
   });
 

@@ -14,10 +14,8 @@ export default function Register() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { token, user } = await register(form);
-      localStorage.setItem('token', token);
-      localStorage.setItem('username', user.username);
-      navigate('/lobby');
+      await register(form);
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrarse');
     }
@@ -27,7 +25,7 @@ export default function Register() {
     <div className="flex items-center justify-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-full max-w-sm"
+        className="text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-sm background-opacity"
       >
         <h2 className="text-2xl mb-4 text-center">Registrarse</h2>
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
@@ -54,7 +52,7 @@ export default function Register() {
           />
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Contraseña</label>
+          <label className="block mb-1 ">Contraseña</label>
           <input
             type="password"
             name="password"
@@ -70,7 +68,7 @@ export default function Register() {
         >
           Registrar
         </button>
-        <p className="mt-4 text-center text-white text-sm">
+        <p className="mt-4 text-center  text-sm">
           ¿Ya tienes cuenta?{' '}
           <Link to="/login" className="text-blue-500 hover:underline">
             Inicia Sesión

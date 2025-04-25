@@ -23,7 +23,7 @@ exports.createGame = async (req, res) => {
     // 3) Crear partida
     const game = new Game({
       code,
-      host: mongoose.Types.ObjectId(hostId),
+      host: hostId,
       players: [hostId],
       questions: questions.map(q => q._id)
     });

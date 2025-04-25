@@ -6,57 +6,89 @@ import Question from '../components/Question';
 export default function Game() {
   const { code } = useParams();
   const username = localStorage.getItem('username');
+  const isHost = localStorage.getItem(`host_${code}`) === 'true';
+
+  const [players, setPlayers] = useState([]);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [gameStarted, setGameStarted] = useState(false);
   const [question, setQuestion] = useState(null);
-  const [results, setResults] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const sock = initSocket(token);
 
-    sock.emit('joinRoom', { code, username });
+   if (isHost) {
+      sock.emit('createRoom', { code, username });
+   } else {
+      sock.emit('joinRoom', { code, username });
+   }
 
+    sock.on('updatePlayers', list => setPlayers(list));
+    sock.on('errorMessage', msg => setErrorMsg(msg));
+    sock.on('gameStarted', () => setGameStarted(true));
     sock.on('newQuestion', q => setQuestion(q));
-    sock.on('gameEnded', res => setResults(res));
 
     return () => sock.disconnect();
-  }, [code, username]);
+  }, [code, username, isHost]);
 
-  const handleStart = () => {
+  const toggleReady = () => {
+    socket.emit('playerReady', { code, username });
+  };
+
+  const startGame = () => {
     socket.emit('startGame', { code });
   };
 
-  const handleAnswer = answer => {
-    socket.emit('submitAnswer', { code, username, answer });
-    setQuestion(null);
-  };
-
-  if (results) {
-    return (
-      <div className="p-4">
-        <h2 className="text-2xl mb-4">Resultados Finales</h2>
-        <ul>
-          {results.map((r, idx) => (
-            <li key={idx} className="mb-2">
-              {r.username}: {r.score}
-            </li>
-          ))}
-        </ul>
-      </div>
+  if (gameStarted) {
+    return question ? (
+      <Question
+        question={question}
+        onAnswer={a => socket.emit('submitAnswer', { code, username, answer: a })}
+      />
+    ) : (
+      <p>Cargando pregunta…</p>
     );
   }
 
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl">Sala: {code}</h2>
-      {!question && (
+      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
+      <ul className="space-y-2">
+        {players.map((p, i) => (
+          <li
+            key={i}
+            className="flex items-center justify-between bg-white p-2 rounded"
+          >
+            <span>{p.username}</span>
+            <span
+              className={`px-2 py-1 rounded ${
+                p.ready ? 'bg-green-200' : 'bg-red-200'
+              }`}
+            >
+              {p.ready ? 'Ready' : 'Not Ready'}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex space-x-2">
         <button
-          onClick={handleStart}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          onClick={toggleReady}
+          className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600"
         >
-          Iniciar Partida
+          {players.find(p => p.username === username)?.ready
+            ? 'Desmarcar Ready'
+            : 'Marcar Ready'}
         </button>
-      )}
-      {question && <Question question={question} onAnswer={handleAnswer} />}
+        {isHost && (
+          <button
+            onClick={startGame}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Iniciar Partida
+          </button>
+        )}
+      </div>
     </div>
   );
 }

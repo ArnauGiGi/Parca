@@ -26,7 +26,7 @@ export default function Login() {
     <div className="flex items-center justify-center h-screen">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-full max-w-sm"
+        className="text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-sm background-opacity"
       >
         <h2 className="text-2xl mb-4 text-center">Iniciar Sesión</h2>
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
