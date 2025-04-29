@@ -5,7 +5,6 @@ import Question from '../components/Question';
 
 export default function Game() {
   const { code } = useParams();
-  console.log(localStorage);
   const username = localStorage.getItem('username');
   const isHost = localStorage.getItem(`host_${code}`) === 'true';
 

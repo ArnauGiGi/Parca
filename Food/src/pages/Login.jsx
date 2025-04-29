@@ -16,7 +16,6 @@ export default function Login() {
     try {
       const { token } = await login(form);
       localStorage.setItem('token', token);
-      localStorage.setItem('username', form.email);
       navigate('/lobby');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');

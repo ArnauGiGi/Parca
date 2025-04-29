@@ -1,3 +1,4 @@
+//Importacion librerias
 require('dotenv').config();
 const express = require('express');
 const http = require('http');
@@ -7,6 +8,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const Game = require('./models/Game');
 
+//rutas
 const authRoutes = require('./routes/authRoutes');
 const gameRoutes = require('./routes/gameRoutes');
 
@@ -18,13 +20,12 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
 
+
+//socket
 const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server, { cors: { origin: '*' } });
 
-// —————————————————————————————————————————————
-// 1) Middleware de autenticación para Socket.IO
-// —————————————————————————————————————————————
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   if (!token) return next(new Error('No token'));
@@ -43,9 +44,6 @@ const rooms = {};  // estado en memoria: code → { host, players: [{ socketId, 
 io.on('connection', socket => {
   console.log(`🔌 Conectado: ${socket.id} (userId=${socket.userId})`);
 
-  // —————————————————————————————
-  // Crear sala (solo host)
-  // —————————————————————————————
   socket.on('createRoom', ({ code }) => {
     rooms[code] = {
       host: socket.id,
@@ -55,9 +53,6 @@ io.on('connection', socket => {
     io.to(code).emit('updatePlayers', rooms[code].players);
   });
 
-  // —————————————————————————————
-  // Unirse a sala (otros jugadores)
-  // —————————————————————————————
   socket.on('joinRoom', ({ code }) => {
     const room = rooms[code];
     if (!room) {
@@ -73,9 +68,6 @@ io.on('connection', socket => {
     io.to(code).emit('updatePlayers', room.players);
   });
 
-  // —————————————————————————————
-  // Toggle Ready
-  // —————————————————————————————
   socket.on('playerReady', ({ code }) => {
     const room = rooms[code];
     if (!room) return;
@@ -85,9 +77,6 @@ io.on('connection', socket => {
     io.to(code).emit('updatePlayers', room.players);
   });
 
-  // —————————————————————————————
-  // Start Game (solo host y si todos ready)
-  // —————————————————————————————
   socket.on('startGame', ({ code }) => {
     const room = rooms[code];
     if (!room) return;
@@ -105,30 +94,48 @@ io.on('connection', socket => {
   // —————————————————————————————
   socket.on('disconnect', async () => {
     console.log(`❌ Desconectado: ${socket.id}`);
+  
     for (const code of Object.keys(rooms)) {
       const room = rooms[code];
       const idx = room.players.findIndex(p => p.socketId === socket.id);
-      if (idx !== -1) {
-        const leaver = room.players.splice(idx, 1)[0];
-        console.log(`👉 ${leaver.username} salió de la sala ${code}`);
-
-        // 1) Emitir lista actualizada a los que quedan
-        if (room.players.length > 0) {
-          io.to(code).emit('updatePlayers', room.players);
-        } else {
-          delete rooms[code];
+      if (idx === -1) continue;
+  
+      const leaver = room.players.splice(idx, 1)[0];
+      console.log(`👉 ${leaver.username} salió de la sala ${code}`);
+      console.log(room);
+      if (room.players.length > 0) {
+        console.log("🛡️ Sala no vacía, actualizando estado");
+        // Si era el host y quedan usuarios, reasignar host
+        if (room.host === socket.id) {
+          room.host = room.players[0].socketId;
+          const newOwner = room.players[0].username;
+          console.log(`🛡️ Nuevo host de ${code}: ${newOwner}`);
+          // Avisamos a todos quién es el nuevo host
+          io.to(code).emit('newHost', { socketId: room.host, username: newOwner });
         }
-
-        // 2) Actualizar documento Game en MongoDB: sacar a este userId de players[]
+        // Emitir la lista actualizada
+        io.to(code).emit('updatePlayers', room.players);
+      } else {
+        // Sala vacía: borramos de memoria y de la DB
+        delete rooms[code];
+        console.log(`🗑  Sala ${code} vacía, eliminada de memoria`);
         try {
-          await Game.findOneAndUpdate(
-            { code },
-            { $pull: { players: mongoose.Types.ObjectId(leaver.userId) } }
-          );
-          console.log(`🗄  Game ${code} DB actualizado, usuario eliminado`);
+          await Game.deleteOne({ code });
+          console.log(`🗄  Game ${code} eliminado de MongoDB`);
         } catch (err) {
-          console.error('⚠️ Error actualizando Game en DB:', err);
+          console.error('⚠️ Error borrando Game en DB:', err);
         }
+      }
+  
+      // Además, aseguramos que el leaver quede fuera del documento
+      try {
+        await Game.findOneAndUpdate(
+          { code },
+          { $pull: { players: leaver.userId } }
+        );
+        console.log(`🗄  Game ${code} DB actualizado, usuario eliminado`);
+      } catch (err) {
+        console.error('⚠️ Error actualizando Game tras disconnect:', err);
       }
     }
   });
@@ -141,6 +148,12 @@ io.on('connection', socket => {
     io.in(code).socketsLeave(code);
     if (rooms[code]) delete rooms[code];
     console.log(`🏁 Partida ${code} finalizada y sala eliminada`);
+  });
+
+  socket.on('newHost', ({ socketId, username }) => {
+    // Actualizar estado isHost, p.ej.:
+    setIsHost(username === localStorage.getItem('username'));
+    // Mostrar en UI que ahora “username” es el host, si quieres
   });
 
   // Aquí irían newQuestion, submitAnswer, etc.
