@@ -15,7 +15,7 @@ export default function Register() {
     e.preventDefault();
     try {
       await register(form);
-      navigate('/');
+      navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrarse');
     }

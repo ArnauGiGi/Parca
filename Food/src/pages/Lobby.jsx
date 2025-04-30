@@ -16,8 +16,7 @@ export default function Lobby() {
       const res = await createGame(token);
       console.log('📨 createGame res:', res);
       if (!res.code) throw new Error('Falta “code” en la respuesta');
-      localStorage.setItem(`host_${res.code}`, 'true');
-      navigate(`/game/${res.code}`);
+      navigate(`/game/${res.code}`, { state: { isHost: true } });
     } catch (err) {
       console.error('🚨 createGame Error:', err);
       setError(

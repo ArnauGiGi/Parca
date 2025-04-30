@@ -45,44 +45,62 @@ io.on('connection', socket => {
   console.log(`🔌 Conectado: ${socket.id} (userId=${socket.userId})`);
 
   socket.on('createRoom', ({ code }) => {
+    console.log(`🔌 Creando sala ${code}...`);
     rooms[code] = {
       host: socket.id,
-      players: [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }]
+      hostUserId: socket.userId,
+      players: [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }],
+      pendingRemovals: new Map()
     };
     socket.join(code);
-    io.to(code).emit('updatePlayers', rooms[code].players);
+    io.to(code).emit('roomData', rooms[code]);
   });
 
+  // Al unirse a la sala
   socket.on('joinRoom', ({ code }) => {
+    console.log(`🔌 Uniendo a sala ${code}...`);
     const room = rooms[code];
-    if (!room) {
-      return socket.emit('errorMessage', 'Sala no existe');
+    if (!room) return socket.emit('errorMessage', 'Sala no existe');
+
+    // Si ya había un pendingRemoval para este userId, cancelarlo
+    if (room.pendingRemovals.has(socket.userId)) {
+
+      clearTimeout(room.pendingRemovals.get(socket.userId));
+      room.pendingRemovals.delete(socket.userId);
     }
-    room.players.push({
-      socketId: socket.id,
-      userId: socket.userId,
-      username: socket.username,
-      ready: false
-    });
+
+    // Si ya existe en players (reconexión), simplemente actualizamos socketId
+    const existing = room.players.find(p => p.userId === socket.userId);
+    if (existing) {
+      existing.socketId = socket.id;
+      existing.username = socket.username; // por si cambió
+    } else {
+      room.players.push({
+        socketId: socket.id,
+        userId: socket.userId,
+        username: socket.username,
+        ready: false
+      });
+    }
+
     socket.join(code);
-    io.to(code).emit('updatePlayers', room.players);
+    io.to(code).emit('roomData', rooms[code]);
   });
 
   socket.on('playerReady', ({ code }) => {
+    console.log(`🔌 ${socket.username} (${socket.userId}) está listo`);
     const room = rooms[code];
     if (!room) return;
     room.players = room.players.map(p =>
       p.socketId === socket.id ? { ...p, ready: !p.ready } : p
     );
-    io.to(code).emit('updatePlayers', room.players);
+    io.to(code).emit('roomData', rooms[code]);  
   });
 
   socket.on('startGame', ({ code }) => {
+    console.log(`🔌 ${socket.username} (${socket.userId}) inicia la partida`);
     const room = rooms[code];
     if (!room) return;
-    if (socket.id !== room.host) {
-      return socket.emit('errorMessage', 'Solo el creador puede iniciar la partida');
-    }
     if (!room.players.every(p => p.ready)) {
       return socket.emit('errorMessage', 'Todos deben estar listos');
     }
@@ -92,70 +110,57 @@ io.on('connection', socket => {
   // —————————————————————————————
   // Desconexión: limpiar memoria y MongoDB
   // —————————————————————————————
-  socket.on('disconnect', async () => {
-    console.log(`❌ Desconectado: ${socket.id}`);
-  
+  socket.on('disconnect', () => {
+    console.log(`🔌 Desconectado: ${socket.id} (userId=${socket.userId})`);
     for (const code of Object.keys(rooms)) {
       const room = rooms[code];
       const idx = room.players.findIndex(p => p.socketId === socket.id);
       if (idx === -1) continue;
-  
-      const leaver = room.players.splice(idx, 1)[0];
-      console.log(`👉 ${leaver.username} salió de la sala ${code}`);
-      console.log(room);
-      if (room.players.length > 0) {
-        console.log("🛡️ Sala no vacía, actualizando estado");
-        // Si era el host y quedan usuarios, reasignar host
-        if (room.host === socket.id) {
+
+      const leaver = room.players[idx];
+      // Programamos la remoción: si en 1s no se reconecta, lo eliminamos
+      const timeout = setTimeout(async () => {
+        // Borrar de memoria
+        room.players = room.players.filter(p => p.userId !== leaver.userId);
+
+        // Reasignar host si era él
+        if (room.hostUserId === socket.userId && room.players.length > 0) {
           room.host = room.players[0].socketId;
-          const newOwner = room.players[0].username;
-          console.log(`🛡️ Nuevo host de ${code}: ${newOwner}`);
-          // Avisamos a todos quién es el nuevo host
-          io.to(code).emit('newHost', { socketId: room.host, username: newOwner });
+          room.hostUserId = room.players[0].userId;
+          socket.userId = room.players[0].userId;
+          socket.username = room.players[0].username;
+          io.to(code).emit('roomData', room);
         }
-        // Emitir la lista actualizada
-        io.to(code).emit('updatePlayers', room.players);
-      } else {
-        // Sala vacía: borramos de memoria y de la DB
-        delete rooms[code];
-        console.log(`🗑  Sala ${code} vacía, eliminada de memoria`);
-        try {
+
+        // Emitir lista actualizada o destruir sala
+        if (room.players.length > 0) {
+          io.to(code).emit('roomData', rooms[code]);         
+        } else {
+          delete rooms[code];
+          // Borrar partida en DB
           await Game.deleteOne({ code });
-          console.log(`🗄  Game ${code} eliminado de MongoDB`);
-        } catch (err) {
-          console.error('⚠️ Error borrando Game en DB:', err);
         }
-      }
-  
-      // Además, aseguramos que el leaver quede fuera del documento
-      try {
+
+        // Actualizar DB: quitar de players[]
         await Game.findOneAndUpdate(
           { code },
           { $pull: { players: leaver.userId } }
         );
-        console.log(`🗄  Game ${code} DB actualizado, usuario eliminado`);
-      } catch (err) {
-        console.error('⚠️ Error actualizando Game tras disconnect:', err);
-      }
+      }, 1000); // 1 segundos de gracia
+
+      // Guardamos el timeout para poder cancelarlo si se reconecta
+      room.pendingRemovals.set(leaver.userId, timeout);
     }
   });
 
-  // —————————————————————————————
-  // End Game: expulsar y limpiar sala
-  // —————————————————————————————
+  // Final de la partida
   socket.on('endGame', async ({ code, results }) => {
     io.to(code).emit('gameEnded', results);
+    console.log(`Partida ${code} terminada. Resultados:`, results);
     io.in(code).socketsLeave(code);
-    if (rooms[code]) delete rooms[code];
-    console.log(`🏁 Partida ${code} finalizada y sala eliminada`);
+    delete rooms[code];
+    await Game.deleteOne({ code });
   });
-
-  socket.on('newHost', ({ socketId, username }) => {
-    // Actualizar estado isHost, p.ej.:
-    setIsHost(username === localStorage.getItem('username'));
-    // Mostrar en UI que ahora “username” es el host, si quieres
-  });
-
   // Aquí irían newQuestion, submitAnswer, etc.
 });
 

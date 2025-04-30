@@ -1,49 +1,80 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { initSocket, socket } from '../services/socket';
+import React, { useEffect, useState, useRef } from 'react';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { initSocket } from '../services/socket';
 import Question from '../components/Question';
 
 export default function Game() {
   const { code } = useParams();
-  const username = localStorage.getItem('username');
-  const isHost = localStorage.getItem(`host_${code}`) === 'true';
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const [players, setPlayers] = useState([]);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const username = localStorage.getItem('username');
+  const token    = localStorage.getItem('token');
+  const myUserId = localStorage.getItem('userId');
+
+  // Mantén siempre la misma instancia
+  const socketRef = useRef(null);
+
+  const [roomData,    setRoomData]    = useState({ players: [], hostUserId: null });
   const [gameStarted, setGameStarted] = useState(false);
-  const [question, setQuestion] = useState(null);
+  const [question,    setQuestion]    = useState(null);
+  const [errorMsg,    setErrorMsg]    = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     const sock = initSocket(token);
+    socketRef.current = sock;
 
-   if (isHost) {
-      sock.emit('createRoom', { code, username });
-   } else {
-      sock.emit('joinRoom', { code, username });
-   }
+    sock.on('connect', () => {
+      // Si vienes con isHost desde Lobby, crear sala; si no, unirse
+      if (location.state?.isHost) {
+        sock.emit('createRoom', { code, username });
+        // limpiar state para que en un refresh no vuelvas a emitir createRoom
+        navigate(location.pathname, { replace: true, state: {} });
+      } else {
+        sock.emit('joinRoom', { code, username });
+      }
+    });
 
-    sock.on('updatePlayers', list => setPlayers(list));
-    sock.on('errorMessage', msg => setErrorMsg(msg));
+    sock.on('roomData', data => {
+      setRoomData(data);
+    });
+    
+    sock.on('errorMessage', setErrorMsg);
     sock.on('gameStarted', () => setGameStarted(true));
-    sock.on('newQuestion', q => setQuestion(q));
+    sock.on('newQuestion', setQuestion);
 
-    return () => sock.disconnect();
-  }, [code, username, isHost]);
+    const handleUnload = () => {
+      sock.emit('leaveRoom', { code });
+    };
+    window.addEventListener('beforeunload', handleUnload);
+
+    return () => {
+      sock.off();
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, [code, token, navigate, location]);
 
   const toggleReady = () => {
-    socket.emit('playerReady', { code, username });
+    socketRef.current.emit('playerReady', { code });
+  };
+  const startGame = () => {
+    socketRef.current.emit('startGame', { code });
+  };
+  const leaveRoom = () => {
+    socketRef.current.disconnect();
+    navigate('/lobby');
   };
 
-  const startGame = () => {
-    socket.emit('startGame', { code });
-  };
+  const { players, hostUserId } = roomData;
+  const amIHost = hostUserId === myUserId;
 
   if (gameStarted) {
     return question ? (
       <Question
         question={question}
-        onAnswer={a => socket.emit('submitAnswer', { code, username, answer: a })}
+        onAnswer={answer =>
+          socketRef.current.emit('submitAnswer', { code, answer })
+        }
       />
     ) : (
       <p>Cargando pregunta…</p>
@@ -54,34 +85,28 @@ export default function Game() {
     <div className="p-4 space-y-4">
       <h2 className="text-2xl">Sala: {code}</h2>
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}
+
       <ul className="space-y-2">
-        {console.log('👥 Jugadores:', players)}
         {players.map((p, i) => (
-          <li
-            key={i}
-            className="flex items-center justify-between bg-white p-2 rounded"
-          >
+          <li key={i} className="flex justify-between bg-white p-2 rounded">
             <span>{p.username}</span>
-            <span
-              className={`px-2 py-1 rounded ${
-                p.ready ? 'bg-green-200' : 'bg-red-200'
-              }`}
-            >
+            <span className={`px-2 py-1 rounded ${p.ready ? 'bg-green-200' : 'bg-red-200'}`}>
               {p.ready ? 'Ready' : 'Not Ready'}
             </span>
           </li>
         ))}
       </ul>
+
       <div className="flex space-x-2">
         <button
           onClick={toggleReady}
           className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600"
         >
-          {players.find(p => p.username === username)?.ready
+          {players.find(p => p.userId === myUserId)?.ready
             ? 'Desmarcar Ready'
             : 'Marcar Ready'}
         </button>
-        {isHost && (
+        {amIHost && (
           <button
             onClick={startGame}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -90,6 +115,13 @@ export default function Game() {
           </button>
         )}
       </div>
+
+      <button
+        onClick={leaveRoom}
+        className="mt-4 text-sm text-gray-600 hover:underline"
+      >
+        Salir de la sala
+      </button>
     </div>
   );
 }
