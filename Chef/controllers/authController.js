@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
 
     // 4) Firmar JWT
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
 
     // 3) Firmar JWT
     const token = jwt.sign(
-      { id: user._id, username: user.username },
+      { id: user._id, username: user.username, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );

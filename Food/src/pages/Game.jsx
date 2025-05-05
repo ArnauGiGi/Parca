@@ -4,64 +4,78 @@ import { initSocket } from '../services/socket';
 import Question from '../components/Question';
 
 export default function Game() {
-  const { code } = useParams();
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { code }      = useParams();
+  const location      = useLocation();
+  const navigate      = useNavigate();
 
-  const username = localStorage.getItem('username');
-  const token    = localStorage.getItem('token');
-  const myUserId = localStorage.getItem('userId');
+  const username      = localStorage.getItem('username');
+  const token         = localStorage.getItem('token');
+  const myUserId      = localStorage.getItem('userId');
 
-  // Mantén siempre la misma instancia
-  const socketRef = useRef(null);
+  // Sólo en la primera renderización tras venir del Lobby
+  const initialHostRef = useRef(location.state?.isHost === true);
 
-  const [roomData,    setRoomData]    = useState({ players: [], hostUserId: null });
+  const [roomData,    setRoomData]    = useState({
+    players: [],    // { socketId, userId, username, ready }
+    host: null,     
+    hostUserId: null
+  });
   const [gameStarted, setGameStarted] = useState(false);
   const [question,    setQuestion]    = useState(null);
-  const [errorMsg,    setErrorMsg]    = useState(null);
+  const [errorMsg,    setErrorMsg]    = useState('');
 
   useEffect(() => {
     const sock = initSocket(token);
-    socketRef.current = sock;
 
-    sock.on('connect', () => {
-      // Si vienes con isHost desde Lobby, crear sala; si no, unirse
-      if (location.state?.isHost) {
-        sock.emit('createRoom', { code, username });
-        // limpiar state para que en un refresh no vuelvas a emitir createRoom
+    // 1) Registramos TODOS los listeners ANTES de emitir
+    sock.on('roomData', data => {
+      setRoomData(data);
+      // Si venimos como host por primera vez, limpiamos el state
+      if (initialHostRef.current) {
         navigate(location.pathname, { replace: true, state: {} });
-      } else {
-        sock.emit('joinRoom', { code, username });
+        initialHostRef.current = false;
       }
     });
 
-    sock.on('roomData', data => {
-      setRoomData(data);
-    });
-    
-    sock.on('errorMessage', setErrorMsg);
+    sock.on('errorMessage', msg => setErrorMsg(msg));
     sock.on('gameStarted', () => setGameStarted(true));
-    sock.on('newQuestion', setQuestion);
+    sock.on('newQuestion', q => setQuestion(q));
 
-    const handleUnload = () => {
-      sock.emit('leaveRoom', { code });
-    };
-    window.addEventListener('beforeunload', handleUnload);
+    // 2) Emitimos create/join con acknowledge
+    sock.on('connect', () => {
+      if (initialHostRef.current) {
+        sock.emit(
+          'createRoom',
+          { code, username },
+          // callback recibe roomData inmediatamente
+          (data) => setRoomData(data)
+        );
+      } else {
+        sock.emit(
+          'joinRoom',
+          { code, username },
+          (data) => setRoomData(data)
+        );
+      }
+    });
 
+    // 3) Cleanup (no emitimos leaveRoom en unload para evitar problemas en F5)
     return () => {
       sock.off();
-      window.removeEventListener('beforeunload', handleUnload);
+      sock.disconnect();
     };
-  }, [code, token, navigate, location]);
+  }, [code, token, navigate, location.pathname]);
 
+  // Handlers usan la misma instancia
   const toggleReady = () => {
-    socketRef.current.emit('playerReady', { code });
+    initSocket(token).emit('playerReady', { code });
   };
   const startGame = () => {
-    socketRef.current.emit('startGame', { code });
+    initSocket(token).emit('startGame', { code });
   };
   const leaveRoom = () => {
-    socketRef.current.disconnect();
+    initSocket(token).emit('leaveRoom', { code });
+    initSocket(token).disconnect();
     navigate('/lobby');
   };
 
@@ -73,7 +87,7 @@ export default function Game() {
       <Question
         question={question}
         onAnswer={answer =>
-          socketRef.current.emit('submitAnswer', { code, answer })
+          initSocket(token).emit('submitAnswer', { code, answer })
         }
       />
     ) : (
@@ -88,9 +102,16 @@ export default function Game() {
 
       <ul className="space-y-2">
         {players.map((p, i) => (
-          <li key={i} className="flex justify-between bg-white p-2 rounded">
+          <li
+            key={i}
+            className="flex justify-between bg-white p-2 rounded"
+          >
             <span>{p.username}</span>
-            <span className={`px-2 py-1 rounded ${p.ready ? 'bg-green-200' : 'bg-red-200'}`}>
+            <span
+              className={`px-2 py-1 rounded ${
+                p.ready ? 'bg-green-200' : 'bg-red-200'
+              }`}
+            >
               {p.ready ? 'Ready' : 'Not Ready'}
             </span>
           </li>
