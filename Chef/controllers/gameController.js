@@ -7,10 +7,8 @@ exports.createGame = async (req, res) => {
   try {
     const hostId = req.user.id;
 
-    // 1) Generar código de 6 dígitos alfanuméricos
     const code = Math.random().toString(36).substr(2, 6).toUpperCase();
 
-    // 2) Seleccionar N preguntas al azar (por ejemplo 10)
     const total = await Question.countDocuments();
     const count = Math.min(10, total);
     const randomSkip = Array.from({ length: count }, () => Math.floor(Math.random() * total));
@@ -20,7 +18,6 @@ exports.createGame = async (req, res) => {
       )
     );
 
-    // 3) Crear partida
     const game = new Game({
       code,
       host: hostId,
@@ -28,7 +25,7 @@ exports.createGame = async (req, res) => {
       questions: questions.map(q => q._id)
     });
     await game.save();
-
+    console.log('Partida creada:', game._id);
     res.status(201).json({ gameId: game._id, code });
   } catch (err) {
     console.error(err);

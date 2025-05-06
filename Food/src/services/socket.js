@@ -1,15 +1,16 @@
 import { io } from 'socket.io-client';
 
 const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5000';
-let socket;
+let socket = null;
 
-export const initSocket = (token) => {
+// Inicializa la conexión enviando cookies HTTP‑Only
+export const initSocket = () => {
   if (!socket) {
     socket = io(SOCKET_URL, {
-      auth: { token },
-      closeOnBeforeunload: false  // evita desconexión en refresh
+      withCredentials: true
     });
   }
   return socket;
 };
+
 export default initSocket;

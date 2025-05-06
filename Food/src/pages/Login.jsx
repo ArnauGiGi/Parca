@@ -14,11 +14,10 @@ export default function Login() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { token, user } = await login(form);
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', user.id);
-      localStorage.setItem('username', user.username);
-      console.log('🤖 token en Login:', token);
+      const { user } = await login(form);
+      sessionStorage.setItem('userId',   user.id);
+      sessionStorage.setItem('username', user.username);
+      console.log('✅ Usuario logueado:', user);
       navigate('/lobby');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');

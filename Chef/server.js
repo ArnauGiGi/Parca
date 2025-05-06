@@ -1,19 +1,24 @@
 require('dotenv').config();
-const express    = require('express');
-const http       = require('http');
-const cors       = require('cors');
-const jwt        = require('jsonwebtoken');
-const mongoose   = require('mongoose');
-const connectDB  = require('./config/db');
-const Game       = require('./models/Game');
+const express      = require('express');
+const cookieParser = require('cookie-parser');
+const http         = require('http');
+const cors         = require('cors');
+const jwt          = require('jsonwebtoken');
+const mongoose     = require('mongoose');
+const connectDB    = require('./config/db');
+const Game         = require('./models/Game');
 
-const authRoutes = require('./routes/authRoutes');
-const gameRoutes = require('./routes/gameRoutes');
-const questionRoutes = require('./routes/questionRoutes');
+const authRoutes      = require('./routes/authRoutes');
+const gameRoutes      = require('./routes/gameRoutes');
+const questionRoutes  = require('./routes/questionRoutes');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 connectDB();
 
 app.use('/api/auth', authRoutes);
@@ -22,74 +27,83 @@ app.use('/api/questions', questionRoutes);
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(server, { cors: { origin: '*' } });
+const cookie = require('cookie');
 
-// Auth middleware para sockets
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    credentials: true
+  }
+});
+
+// Auth middleware para sockets, extrayendo cookie HTTP‑Only
 io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
+  const header = socket.handshake.headers.cookie;
+  if (!header) return next(new Error('No cookie'));
+  const cookies = cookie.parse(header);
+  const token = cookies.token;
   if (!token) return next(new Error('No token'));
   try {
-    const decoded      = jwt.verify(token, process.env.JWT_SECRET);
-    socket.userId      = decoded.id;
-    socket.username    = decoded.username;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = decoded.id;
+    socket.username = decoded.username;
     next();
   } catch (err) {
     next(new Error('Authentication error'));
   }
 });
 
-const rooms = {}; // code → { host, hostUserId, players: […], pendingRemovals }
+const rooms = {}; // code → { host, hostUserId, players, pendingRemovals }
 
 io.on('connection', socket => {
   console.log(`🔌 Conectado: ${socket.id} (userId=${socket.userId})`);
 
   // Crear sala
-  socket.on('createRoom', ({ code }, ack) => {
+  socket.on('createRoom', (payload, ack) => {
+    console.log("crearSala");
+    const { code } = payload;
     rooms[code] = {
-      host: socket.id,
-      hostUserId: socket.userId,
-      players: [{
-        socketId: socket.id,
-        userId: socket.userId,
-        username: socket.username,
-        ready: false
-      }],
+      host:         socket.id,
+      hostUserId:   socket.userId,
+      players:      [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }],
       pendingRemovals: new Map()
     };
     socket.join(code);
-    // 1) responder al cliente
     ack(rooms[code]);
-    // 2) broadcast a todos en la sala
     io.to(code).emit('roomData', rooms[code]);
   });
 
   // Unirse a sala
-  socket.on('joinRoom', ({ code }, ack) => {
+  socket.on('joinRoom', (payload, ack) => {
+    const { code } = payload;
     const room = rooms[code];
-    if (!room) return socket.emit('errorMessage', 'Sala no existe');
-
-    // Cancelar removal si venimos de refresh
-    if (room.pendingRemovals.has(socket.userId)) {
+    if (room && room.pendingRemovals.has(socket.userId)) {
       clearTimeout(room.pendingRemovals.get(socket.userId));
       room.pendingRemovals.delete(socket.userId);
     }
-
+  
+    // Usa socket.username (del JWT) en lugar de payload.username
     const existing = room.players.find(p => p.userId === socket.userId);
     if (existing) {
       existing.socketId = socket.id;
     } else {
       room.players.push({
         socketId: socket.id,
-        userId: socket.userId,
+        userId:   socket.userId,
         username: socket.username,
-        ready: false
+        ready:    false
       });
     }
     socket.join(code);
+    console.log('Sala', code, 'hostUserId=', rooms[code].hostUserId, 'players=', rooms[code].players);
 
-    ack(room);                 // ack al cliente
-    io.to(code).emit('roomData', room); // broadcast
+    // 1) Envía por ack el estado completo de la sala
+    ack(room);
+  
+    // 2) Publica a todos el objeto sala completo
+    io.to(code).emit('roomData', room);
   });
+  
 
   // Toggle Ready
   socket.on('playerReady', ({ code }) => {
@@ -146,14 +160,15 @@ io.on('connection', socket => {
           { code },
           { $pull: { players: leaver.userId } }
         );
-      }, 10000);
-
+      }, 2500);
+      console.log(`⏳ ${leaver.username} se ha desconectado. Esperando ${timeout}ms para eliminar...`);
       room.pendingRemovals.set(leaver.userId, timeout);
     });
   });
 
   // Salir voluntario
   socket.on('leaveRoom', async ({ code }) => {
+    console.log("🚪 Salir de sala:", code);
     const room = rooms[code];
     if (!room) return;
     room.players = room.players.filter(p => p.userId !== socket.userId);

@@ -18,14 +18,6 @@ exports.register = async (req, res) => {
     user = new User({ username, email, password: passwordHash });
     await user.save();
 
-    // 4) Firmar JWT
-    const token = jwt.sign(
-      { id: user._id, username: user.username, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-
-    res.status(201).json({ token, user: { id: user._id, username: user.username } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error del servidor' });
@@ -44,13 +36,14 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: 'Credenciales inválidas' });
 
     // 3) Firmar JWT
-    const token = jwt.sign(
-      { id: user._id, username: user.username, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
+    const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.JWT_SECRET, { expiresIn: '24h' });
+    res.cookie('token', token, {
+       httpOnly: true,
+       secure: process.env.NODE_ENV === 'production',
+       sameSite: 'strict',
+       maxAge: 24 * 60 * 60 * 1000
+     }).json({ user: { id: user._id, username: user.username, role: user.role } });
 
-    res.json({ token, user: { id: user._id, username: user.username } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Error del servidor' });

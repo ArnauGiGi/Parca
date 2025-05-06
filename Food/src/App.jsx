@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
+import Login    from './pages/Login';
 import Register from './pages/Register';
-import Lobby from './pages/Lobby';
-import Game from './pages/Game';
-import Admin from './pages/Admin';
+import Lobby    from './pages/Lobby';
+import Game     from './pages/Game';
+import Admin    from './pages/Admin';
+import { me }   from './api/auth';
 
 function App() {
-  const token = localStorage.getItem('token');
-  const role  = localStorage.getItem('role');
+  const [user, setUser]       = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    me()
+      .then(u => setUser(u))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p>Cargando...</p>;
 
   return (
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/lobby" element={token ? <Lobby /> : <Navigate to="/login" />} />
-        <Route path="/game/:code" element={token ? <Game /> : <Navigate to="/login" />} />
+        <Route
+          path="/lobby"
+          element={user ? <Lobby /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/game/:code"
+          element={user ? <Game /> : <Navigate to="/login" />}
+        />
         <Route
           path="/admin"
-          element={token && role === 'admin' ? <Admin /> : <Navigate to="/login" />}
+          element={user?.role === 'admin' ? <Admin /> : <Navigate to="/login" />}
         />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>

@@ -8,15 +8,13 @@ export default function Game() {
   const location      = useLocation();
   const navigate      = useNavigate();
 
-  const username      = localStorage.getItem('username');
-  const token         = localStorage.getItem('token');
-  const myUserId      = localStorage.getItem('userId');
+  const username      = sessionStorage.getItem('username');
+  const myUserId      = sessionStorage.getItem('userId');
 
   // Sólo en la primera renderización tras venir del Lobby
   const initialHostRef = useRef(location.state?.isHost === true);
-
   const [roomData,    setRoomData]    = useState({
-    players: [],    // { socketId, userId, username, ready }
+    players: [],
     host: null,     
     hostUserId: null
   });
@@ -24,58 +22,41 @@ export default function Game() {
   const [question,    setQuestion]    = useState(null);
   const [errorMsg,    setErrorMsg]    = useState('');
 
+  const socketRef = useRef(null);
+
   useEffect(() => {
-    const sock = initSocket(token);
-
-    // 1) Registramos TODOS los listeners ANTES de emitir
-    sock.on('roomData', data => {
-      setRoomData(data);
-      // Si venimos como host por primera vez, limpiamos el state
-      if (initialHostRef.current) {
-        navigate(location.pathname, { replace: true, state: {} });
-        initialHostRef.current = false;
-      }
-    });
-
-    sock.on('errorMessage', msg => setErrorMsg(msg));
+    const sock = initSocket();
+    socketRef.current = sock;
+    
+    // 1) Listeners
+    sock.on('roomData', data => setRoomData(data));
     sock.on('gameStarted', () => setGameStarted(true));
     sock.on('newQuestion', q => setQuestion(q));
-
-    // 2) Emitimos create/join con acknowledge
+    sock.on('errorMessage', msg => setErrorMsg(msg));
+  
     sock.on('connect', () => {
       if (initialHostRef.current) {
-        sock.emit(
-          'createRoom',
-          { code, username },
-          // callback recibe roomData inmediatamente
-          (data) => setRoomData(data)
-        );
+        sock.emit('createRoom', { code, username }, data => {
+          setRoomData(data);
+          navigate(`/game/${code}`, { replace: true });
+          initialHostRef.current = false;
+        });
       } else {
-        sock.emit(
-          'joinRoom',
-          { code, username },
-          (data) => setRoomData(data)
-        );
+        sock.emit('joinRoom', { code, username }, data => {
+          setRoomData(data);
+          navigate(`/game/${code}`, { replace: true });
+        });
       }
     });
+  
+    return () => { sock.off(); sock.disconnect(); };
+  }, [code]);
 
-    // 3) Cleanup (no emitimos leaveRoom en unload para evitar problemas en F5)
-    return () => {
-      sock.off();
-      sock.disconnect();
-    };
-  }, [code, token, navigate, location.pathname]);
-
-  // Handlers usan la misma instancia
-  const toggleReady = () => {
-    initSocket(token).emit('playerReady', { code });
-  };
-  const startGame = () => {
-    initSocket(token).emit('startGame', { code });
-  };
-  const leaveRoom = () => {
-    initSocket(token).emit('leaveRoom', { code });
-    initSocket(token).disconnect();
+  const toggleReady = () => socketRef.current.emit('playerReady', { code });
+  const startGame  = () => socketRef.current.emit('startGame',   { code });
+  const leaveRoom  = () => {
+    socketRef.current.emit('leaveRoom', { code });
+    socketRef.current.disconnect();
     navigate('/lobby');
   };
 
@@ -86,24 +67,22 @@ export default function Game() {
     return question ? (
       <Question
         question={question}
-        onAnswer={answer =>
-          initSocket(token).emit('submitAnswer', { code, answer })
-        }
+        onAnswer={answer => socketRef.current.emit('submitAnswer', { code, answer })}
       />
     ) : (
       <p>Cargando pregunta…</p>
     );
   }
-
+  console.log(players);
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl">Sala: {code}</h2>
       {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-
+      
       <ul className="space-y-2">
-        {players.map((p, i) => (
+        {players.map(p => (
           <li
-            key={i}
+            key={p.userId}
             className="flex justify-between bg-white p-2 rounded"
           >
             <span>{p.username}</span>
