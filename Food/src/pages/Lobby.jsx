@@ -6,17 +6,13 @@ export default function Lobby() {
   const [codeInput, setCodeInput] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
 
   const handleCreate = async () => {
     setError('');
-    console.log('🤖 token en Lobby:', token);
     console.log('📡 POST a createGame…');
     try {
-      const res = await createGame(token);
-      console.log('📨 createGame res:', res);
-      if (!res.code) throw new Error('Falta “code” en la respuesta');
-      navigate(`/game/${res.code}`, { state: { isHost: true } });
+      const { code } = await createGame();
+      navigate(`/game/${code}`, { state: { isHost: true } });
     } catch (err) {
       console.error('🚨 createGame Error:', err);
       setError(
@@ -30,8 +26,7 @@ export default function Lobby() {
   const handleJoin = async () => {
     setError('');
     try {
-      const res = await joinGame(codeInput, token);
-      console.log('📨 joinGame res:', res);
+      await joinGame(codeInput);
       navigate(`/game/${codeInput}`);
     } catch (err) {
       console.error('🚨 joinGame Error:', err);

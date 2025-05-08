@@ -7,6 +7,7 @@ const jwt          = require('jsonwebtoken');
 const mongoose     = require('mongoose');
 const connectDB    = require('./config/db');
 const Game         = require('./models/Game');
+const Question     = require('./models/Question');
 
 const authRoutes      = require('./routes/authRoutes');
 const gameRoutes      = require('./routes/gameRoutes');
@@ -66,7 +67,12 @@ io.on('connection', socket => {
       host:         socket.id,
       hostUserId:   socket.userId,
       players:      [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }],
-      pendingRemovals: new Map()
+      pendingRemovals: new Map(),
+      questions: [],       
+      currentQ: 0,          
+      lives: {},           
+      turnOrder: [],       
+      turnIndex: 0    
     };
     socket.join(code);
     ack(rooms[code]);
@@ -81,7 +87,10 @@ io.on('connection', socket => {
       clearTimeout(room.pendingRemovals.get(socket.userId));
       room.pendingRemovals.delete(socket.userId);
     }
-  
+    if (!room) {
+      socket.emit('errorMessage', 'La sala no existe');
+      return;
+    }
     // Usa socket.username (del JWT) en lugar de payload.username
     const existing = room.players.find(p => p.userId === socket.userId);
     if (existing) {
@@ -116,7 +125,7 @@ io.on('connection', socket => {
   });
 
   // Iniciar Partida
-  socket.on('startGame', ({ code }) => {
+  socket.on('startGame', async ({ code }) => {
     const room = rooms[code];
     if (!room) return;
     if (socket.userId !== room.hostUserId) {
@@ -125,7 +134,69 @@ io.on('connection', socket => {
     if (!room.players.every(p => p.ready)) {
       return socket.emit('errorMessage', 'Todos deben estar listos');
     }
-    io.to(code).emit('gameStarted');
+
+    //Cargar 10 preguntas
+    const picks = await Question.aggregate([{ $sample: { size: 10 } }]);
+    room.questions = picks;
+    room.currentQ  = 0;
+    
+    //Vidas y turnos
+    room.lives     = {};
+    room.turnOrder = room.players.map(p => p.userId);
+    room.turnIndex = 0;
+    room.turnOrder.forEach(id => room.lives[id] = 4);
+
+    //iniciar partida
+    io.to(code).emit('gameStarted', {
+      question: picks[0],
+      turnUserId: room.turnOrder[0],
+      lives: room.lives
+    });
+  });
+
+  socket.on('submitAnswer', ({ code, answer }) => {
+    const room = rooms[code];
+    if (!room) return;
+    const userId = socket.userId;
+    // Solo el que tiene el turno puede responder
+    if (userId !== room.turnOrder[room.turnIndex]) return;
+    
+    const q = room.questions[room.currentQ];
+    const correct = (answer === q.correctAnswer);
+    if (!correct) {
+      room.lives[userId]--;
+    }
+    // Notificar resultado a todos
+    io.to(code).emit('answerResult', {
+      userId,
+      username: socket.username,
+      answer,
+      correct,
+      correctAnswer: q.correctAnswer,
+      lives: room.lives
+    });
+  
+    // Eliminar de turno si sin vidas
+    if (room.lives[userId] <= 0) {
+      room.turnOrder.splice(room.turnIndex, 1);
+      room.turnIndex--; // compensar avance
+    }
+  
+    // Comprobar fin de juego
+    if (room.turnOrder.length === 1) {
+      return io.to(code).emit('gameEnded', { winner: room.turnOrder[0] });
+    }
+  
+    // Avanzar turno y pregunta
+    room.currentQ++;
+    room.turnIndex = (room.turnIndex + 1) % room.turnOrder.length;
+    const nextQ = room.questions[room.currentQ];
+    const nextUser = room.turnOrder[room.turnIndex];
+    io.to(code).emit('nextTurn', {
+      question: nextQ,
+      turnUserId: nextUser,
+      lives: room.lives
+    });
   });
 
   // Desconexión con grace period

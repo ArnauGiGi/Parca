@@ -14,13 +14,6 @@ export default function Admin() {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  // Verificar rol admin
-  const role = localStorage.getItem('role');
-  if (role !== 'admin') {
-    navigate('/login');
-    return null;
-  }
-
   const handleChange = e => {
     const { name, value } = e.target;
     if (name.startsWith('option')) {
@@ -46,86 +39,88 @@ export default function Admin() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow-md">
-      <h2 className="text-2xl mb-4">Panel de Administración</h2>
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      {success && <p className="text-green-500 mb-2">{success}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block mb-1">Pregunta</label>
-          <input
-            type="text"
-            name="question"
-            value={form.question}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        {[0,1,2,3].map(i => (
-          <div key={i}>
-            <label className="block mb-1">Opción {i+1}</label>
+    <div className="flex items-center justify-center h-screen">
+      <div className='text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-1/3 background-opacity'>
+        <h2 className="text-2xl mb-4">Panel de Administración</h2>
+        {error && <p className="text-red-500 mb-2">{error}</p>}
+        {success && <p className="text-green-500 mb-2">{success}</p>}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block mb-1">Pregunta</label>
             <input
               type="text"
-              name={`option${i}`}
-              value={form.options[i]}
+              name="question"
+              value={form.question}
               onChange={handleChange}
               required
               className="w-full border px-3 py-2 rounded"
             />
           </div>
-        ))}
 
-        <div>
-          <label className="block mb-1">Respuesta Correcta</label>
-          <select
-            name="correctAnswer"
-            value={form.correctAnswer}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
+          {[0,1,2,3].map(i => (
+            <div key={i}>
+              <label className="block mb-1">Opción {i+1}</label>
+              <input
+                type="text"
+                name={`option${i}`}
+                value={form.options[i]}
+                onChange={handleChange}
+                required
+                className="w-full border px-3 py-2 rounded"
+              />
+            </div>
+          ))}
+
+          <div>
+            <label className="block mb-1">Respuesta Correcta</label>
+            <select
+              name="correctAnswer"
+              value={form.correctAnswer}
+              onChange={handleChange}
+              required
+              className="w-full border px-3 py-2 rounded"
+            >
+              <option value="">-- Elige la opción --</option>
+              {form.options.map((opt, idx) => (
+                <option key={idx} value={opt}>{opt}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-1">Categoría</label>
+            <input
+              type="text"
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              required
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1">Dificultad</label>
+            <select
+              name="difficulty"
+              value={form.difficulty}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+            >
+              <option value="fácil">Fácil</option>
+              <option value="media">Media</option>
+              <option value="difícil">Difícil</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
           >
-            <option value="">-- Elige la opción --</option>
-            {form.options.map((opt, idx) => (
-              <option key={idx} value={opt}>{opt}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block mb-1">Categoría</label>
-          <input
-            type="text"
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">Dificultad</label>
-          <select
-            name="difficulty"
-            value={form.difficulty}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          >
-            <option value="fácil">Fácil</option>
-            <option value="media">Media</option>
-            <option value="difícil">Difícil</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
-        >
-          Crear Pregunta
-        </button>
-      </form>
+            Crear Pregunta
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
