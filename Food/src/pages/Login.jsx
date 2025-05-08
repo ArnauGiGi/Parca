@@ -40,7 +40,7 @@ export default function Login() {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="input-field w-full"
           />
         </div>
         <div className="mb-4">
@@ -51,12 +51,12 @@ export default function Login() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="input-field w-full"
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+          className="button-primary w-full"
         >
           Entrar
         </button>

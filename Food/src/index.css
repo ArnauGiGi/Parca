@@ -1,5 +1,173 @@
-@import "tailwindcss"; 
+@import "tailwindcss";
 
-.background-opacity{
-    background-color: rgba(0, 0, 0, 0.7);
+:root {
+    --background-intensity: 0.8; /* Ajusta entre 0 y 1 */
+  }
+  
+  #background-overlay {
+    opacity: calc(0.7 * var(--background-intensity));
+  }
+
+/* Efecto de niebla y ambiente oscuro */
+#background-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(16, 23, 42, 0.7) 0%,
+    rgba(0, 0, 0, 0.9) 100%
+  );
+  z-index: 1;
 }
+
+/* Efecto de partículas flotantes */
+@keyframes floatingParticles {
+  0% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 0.5; }
+  100% { opacity: 0; transform: translateY(-100px); }
+}
+
+#background-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at center, rgba(255,255,255,0.1) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: floatingParticles 15s infinite linear;
+  z-index: 2;
+}
+
+/* Suave animación del fondo */
+#background-img {
+  animation: slowPan 30s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+@keyframes slowPan {
+  0% { transform: scale(1.05) translate(-1%, -1%); }
+  100% { transform: scale(1.05) translate(1%, 1%); }
+}
+
+body {
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.8), 
+      rgba(0, 0, 0, 0.8)
+    ), url('/path/to/your/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      45deg,
+      rgba(26, 28, 44, 0.8) 0%,
+      rgba(42, 48, 71, 0.8) 100%
+    );
+    animation: gradientAnimation 15s ease infinite;
+    z-index: -1;
+  }
+  
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.background-opacity {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.37);
+}
+
+.button-primary {
+  @apply bg-gradient-to-r from-blue-500 to-indigo-600 
+         text-white font-medium py-2 px-4 rounded-lg
+         transition-all duration-200 hover:from-blue-600 
+         hover:to-indigo-700 hover:shadow-lg 
+         active:scale-95;
+}
+
+.button-secondary {
+  @apply bg-gradient-to-r from-green-500 to-teal-600
+         text-white font-medium py-2 px-4 rounded-lg
+         transition-all duration-200 hover:from-green-600
+         hover:to-teal-700 hover:shadow-lg
+         active:scale-95;
+}
+
+.input-field {
+  @apply bg-white/10 border border-white/20 text-white
+         rounded-lg px-4 py-2 outline-none focus:ring-2
+         focus:ring-blue-500 transition-all duration-200;
+}
+  
+  /* Mejoras para las cards */
+  .glass-card {
+    background: rgba(13, 17, 23, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Mejora para inputs y selects */
+  .input-field {
+    @apply bg-gray-900/80 border border-gray-700 text-white
+           rounded-lg px-4 py-2 outline-none focus:ring-2
+           focus:ring-blue-500 transition-all duration-200;
+  }
+  
+  /* Clases para títulos y textos importantes */
+  .title-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r 
+           from-blue-400 to-purple-500 font-bold;
+  }
+  
+  .room-code {
+    @apply text-3xl font-bold text-white text-shadow-lg
+           bg-gradient-to-r from-purple-600 to-blue-500
+           px-6 py-2 rounded-lg inline-block;
+  }

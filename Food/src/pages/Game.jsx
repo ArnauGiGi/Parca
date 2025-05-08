@@ -99,47 +99,92 @@ export default function Game() {
   // RENDER
   if (!gameStarted) {
     return (
-      <div className="p-4 space-y-4">
-        <h2 className="text-2xl">Sala: {code}</h2>
-        {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-        <ul className="space-y-2">
-          {players.map(p => (
-            <li key={p.userId} className="flex justify-between bg-white p-2 rounded">
-              <span>{p.username}</span>
-              <span className={`px-2 py-1 rounded ${p.ready ? 'bg-green-200' : 'bg-red-200'}`}>{p.ready ? 'Ready' : 'Not Ready'}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="flex space-x-2">
-          <button onClick={toggleReady} className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">
-            {players.find(p => p.userId === myUserId)?.ready ? 'Desmarcar Ready' : 'Marcar Ready'}
-          </button>
-          {amIHost && <button onClick={startGame} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Iniciar Partida</button>}
+      <div className="p-8 max-w-4xl mx-auto space-y-6">
+        <h2 className="room-code text-center mb-8">
+          Sala: {code}
+        </h2>
+        {errorMsg && (
+          <p className="text-red-400 bg-red-900/50 p-3 rounded-lg text-shadow">
+            {errorMsg}
+          </p>
+        )}
+        <div className="glass-card p-6 rounded-xl">
+          <h3 className="text-xl text-white text-shadow mb-4">Jugadores</h3>
+          <ul className="space-y-3">
+            {players.map(p => (
+              <li key={p.userId} 
+                  className={`glass-card p-4 rounded-lg flex justify-between items-center
+                             ${p.ready ? 'border-green-500/30' : 'border-red-500/30'}`}>
+                <span className="text-white text-shadow">{p.username}</span>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium
+                                ${p.ready ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
+                  {p.ready ? 'Listo' : 'No Listo'}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <button onClick={leaveRoom} className="mt-4 text-sm text-gray-600 hover:underline">Salir de la sala</button>
+        <div className="flex gap-4">
+          <button onClick={toggleReady} 
+                  className="flex-1 button-primary text-lg">
+            {players.find(p => p.userId === myUserId)?.ready ? 'No Listo' : 'Listo'}
+          </button>
+          {amIHost && (
+            <button onClick={startGame} 
+                    className="flex-1 bg-gradient-to-r from-purple-600 to-blue-500
+                              text-white text-lg py-3 px-6 rounded-lg hover:from-purple-700 
+                              hover:to-blue-600 transition-all duration-300">
+              Iniciar Partida
+            </button>
+          )}
+        </div>
+        <button onClick={leaveRoom} 
+                className="text-gray-400 hover:text-white transition-colors duration-300
+                          underline text-shadow">
+          Salir de la sala
+        </button>
       </div>
     );
   }
 
-  // Game in progress
   return (
-    <div className="p-4 space-y-4">
-      <h2 className="text-2xl">Sala: {code}</h2>
-      <p className="font-semibold">Turno de: {players.find(p => p.userId === turnUserId)?.username}</p>
-      <div>
-        <h3 className="font-medium">Vidas:</h3>
-        <ul className="space-y-1">
+    <div className="p-8 max-w-4xl mx-auto space-y-6">
+      <h2 className="room-code text-center mb-8">
+        Sala: {code}
+      </h2>
+      <div className="glass-card p-6 rounded-xl mb-6">
+        <h3 className="text-xl text-white text-shadow mb-4">Jugadores</h3>
+        <div className="grid grid-cols-2 gap-4">
           {players.map(p => (
-            <li key={p.userId}>{p.username}: {lives[p.userId] ?? 0} ❤</li>
+            <div key={p.userId} 
+                className={`p-4 rounded-lg ${
+                  p.userId === turnUserId 
+                  ? 'bg-gradient-to-r from-purple-600/30 to-blue-500/30 border border-white/20' 
+                  : 'glass-card'
+                }`}>
+              <p className="text-white text-shadow mb-2">{p.username}</p>
+              <p className="text-xl">
+                {'❤️'.repeat(Math.max(0, lives[p.userId] || 0))}
+                {'🖤'.repeat(Math.max(0, 4 - (lives[p.userId] || 0)))}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       {question ? (
-        <Question question={question} onAnswer={submitAnswer} disabled={turnUserId !== myUserId || !answering} />
+        <Question question={question} 
+                  onAnswer={submitAnswer} 
+                  disabled={turnUserId !== myUserId || !answering} />
       ) : (
-        <p>Cargando pregunta…</p>
+        <p className="text-white text-shadow text-xl text-center">
+          Cargando pregunta...
+        </p>
       )}
-      <button onClick={leaveRoom} className="mt-4 text-sm text-gray-600 hover:underline">Salir de la sala</button>
+      <button onClick={leaveRoom} 
+              className="text-gray-400 hover:text-white transition-colors duration-300
+                        underline text-shadow">
+        Salir de la sala
+      </button>
     </div>
   );
 }

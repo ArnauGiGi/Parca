@@ -39,27 +39,28 @@ export default function Lobby() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-sm background-opacity">
-        <h2 className="text-2xl mb-4">Lobby</h2>
-        {error && <p className="text-red-400 mb-2">{error}</p>}
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="glass-card max-w-md w-full p-8 rounded-xl">
+        <h2 className="text-3xl font-bold text-white mb-6">Lobby</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <button
           onClick={handleCreate}
-          className="w-full bg-blue-500 px-4 py-2 rounded mb-4 hover:bg-blue-600"
+          className="button-primary w-full mb-4"
         >
           Crear Partida
         </button>
-        <div className="flex space-x-2">
+        
+        <div className="flex gap-2">
           <input
             type="text"
+            className="input-field flex-1"
             placeholder="Código de partida"
             value={codeInput}
             onChange={e => setCodeInput(e.target.value.toUpperCase())}
-            className="flex-1 border px-3 py-2 rounded"
           />
           <button
             onClick={handleJoin}
-            className="bg-green-500 px-4 py-2 rounded hover:bg-green-600"
+            className="button-secondary"
           >
             Unirse
           </button>

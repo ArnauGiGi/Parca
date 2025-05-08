@@ -37,7 +37,7 @@ export default function Register() {
             value={form.username}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="input-field w-full"
           />
         </div>
         <div className="mb-4">
@@ -48,7 +48,7 @@ export default function Register() {
             value={form.email}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="input-field w-full"
           />
         </div>
         <div className="mb-4">
@@ -59,12 +59,12 @@ export default function Register() {
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full border px-3 py-2 rounded"
+            className="input-field w-full"
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-green-500 py-2 rounded hover:bg-green-600"
+          className="button-primary w-full"
         >
           Registrar
         </button>

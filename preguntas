@@ -1,0 +1,424 @@
+[
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a1"},
+    "question": "¿Cuál es el río más largo del mundo?",
+    "options": ["Nilo", "Amazonas", "Yangtsé", "Misisipi"],
+    "correctAnswer": "Amazonas",
+    "category": "Geografía",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a2"},
+    "question": "¿En qué año comenzó la Primera Guerra Mundial?",
+    "options": ["1913", "1914", "1915", "1916"],
+    "correctAnswer": "1914",
+    "category": "Historia",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a3"},
+    "question": "¿Qué artista pintó 'La noche estrellada'?",
+    "options": ["Pablo Picasso", "Claude Monet", "Vincent van Gogh", "Salvador Dalí"],
+    "correctAnswer": "Vincent van Gogh",
+    "category": "Arte",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },{
+    "_id": {"$oid": "681b3596198a35f3a252d8a4"},
+    "question": "¿Qué elemento químico tiene el símbolo 'Fe'?",
+    "options": ["Fósforo", "Flúor", "Hierro", "Flerovio"],
+    "correctAnswer": "Hierro",
+    "category": "Ciencia",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a5"},
+    "question": "¿Quién compuso la Novena Sinfonía?",
+    "options": ["Mozart", "Bach", "Beethoven", "Tchaikovsky"],
+    "correctAnswer": "Beethoven",
+    "category": "Música",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a6"},
+    "question": "¿En qué año se fundó Microsoft?",
+    "options": ["1975", "1976", "1980", "1985"],
+    "correctAnswer": "1975",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a7"},
+    "question": "¿Cuál es el planeta más grande del sistema solar?",
+    "options": ["Saturno", "Júpiter", "Neptuno", "Urano"],
+    "correctAnswer": "Júpiter",
+    "category": "Astronomía",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a8"},
+    "question": "¿Qué jugador ha ganado más Balones de Oro?",
+    "options": ["Cristiano Ronaldo", "Pelé", "Lionel Messi", "Johan Cruyff"],
+    "correctAnswer": "Lionel Messi",
+    "category": "Fútbol",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8a9"},
+    "question": "¿Cuál es la capital de Vietnam?",
+    "options": ["Ho Chi Minh", "Hanói", "Bangkok", "Manila"],
+    "correctAnswer": "Hanói",
+    "category": "Geografía",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b0"},
+    "question": "¿En qué año se completó el Proyecto del Genoma Humano?",
+    "options": ["2001", "2003", "2005", "2007"],
+    "correctAnswer": "2003",
+    "category": "Ciencia",
+    "difficulty": "difícil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b1"},
+    "question": "¿Cuál es el hueso más largo del cuerpo humano?",
+    "options": ["Húmero", "Fémur", "Tibia", "Peroné"],
+    "correctAnswer": "Fémur",
+    "category": "Biología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b2"},
+    "question": "¿En qué año se descubrió América?",
+    "options": ["1490", "1491", "1492", "1493"],
+    "correctAnswer": "1492",
+    "category": "Historia",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b3"},
+    "question": "¿Cuál es el metal más caro del mundo?",
+    "options": ["Oro", "Platino", "Rodio", "Paladio"],
+    "correctAnswer": "Rodio",
+    "category": "Ciencia",
+    "difficulty": "difícil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b4"},
+    "question": "¿Quién escribió 'Cien años de soledad'?",
+    "options": ["Mario Vargas Llosa", "Gabriel García Márquez", "Julio Cortázar", "Pablo Neruda"],
+    "correctAnswer": "Gabriel García Márquez",
+    "category": "Literatura",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b5"},
+    "question": "¿En qué año se fundó Google?",
+    "options": ["1996", "1997", "1998", "1999"],
+    "correctAnswer": "1998",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b6"},
+    "question": "¿Cuál es la velocidad de la luz?",
+    "options": ["299,792 km/s", "299,792 m/s", "299,792,458 m/s", "299,792,458 km/s"],
+    "correctAnswer": "299,792,458 m/s",
+    "category": "Física",
+    "difficulty": "difícil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b7"},
+    "question": "¿Quién pintó 'El Grito'?",
+    "options": ["Edvard Munch", "Gustav Klimt", "Claude Monet", "Pablo Picasso"],
+    "correctAnswer": "Edvard Munch",
+    "category": "Arte",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b8"},
+    "question": "¿Cuál es el país más poblado del mundo?",
+    "options": ["China", "India", "Estados Unidos", "Indonesia"],
+    "correctAnswer": "India",
+    "category": "Geografía",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8b9"},
+    "question": "¿En qué año se estrenó la primera película de Star Wars?",
+    "options": ["1975", "1976", "1977", "1978"],
+    "correctAnswer": "1977",
+    "category": "Cine",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c0"},
+    "question": "¿Cuál es el océano más profundo?",
+    "options": ["Atlántico", "Índico", "Pacífico", "Ártico"],
+    "correctAnswer": "Pacífico",
+    "category": "Geografía",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c1"},
+    "question": "¿En qué año se inventó el primer teléfono móvil comercial?",
+    "options": ["1973", "1983", "1993", "2003"],
+    "correctAnswer": "1983",
+    "category": "Tecnología",
+    "difficulty": "difícil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c2"},
+    "question": "¿Cuál es el elemento más abundante en el universo?",
+    "options": ["Helio", "Hidrógeno", "Oxígeno", "Carbono"],
+    "correctAnswer": "Hidrógeno",
+    "category": "Ciencia",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c3"},
+    "question": "¿Quién ganó el Mundial de Fútbol de 2010?",
+    "options": ["Brasil", "Alemania", "España", "Italia"],
+    "correctAnswer": "España",
+    "category": "Deportes",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c4"},
+    "question": "¿Cuál es la capital de Australia?",
+    "options": ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+    "correctAnswer": "Canberra",
+    "category": "Geografía",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c5"},
+    "question": "¿En qué año se fundó Twitter?",
+    "options": ["2004", "2005", "2006", "2007"],
+    "correctAnswer": "2006",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c6"},
+    "question": "¿Qué plataforma de streaming musical tiene más usuarios en 2025?",
+    "options": ["Spotify", "Apple Music", "Amazon Music", "YouTube Music"],
+    "correctAnswer": "Spotify",
+    "category": "Tecnología",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c7"},
+    "question": "¿Qué videojuego popularizó el género 'Battle Royale'?",
+    "options": ["PUBG", "Fortnite", "H1Z1", "Apex Legends"],
+    "correctAnswer": "PUBG",
+    "category": "Videojuegos",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c8"},
+    "question": "¿Cuál fue la primera red social en alcanzar los 1000 millones de usuarios?",
+    "options": ["Twitter", "Instagram", "Facebook", "TikTok"],
+    "correctAnswer": "Facebook",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8c9"},
+    "question": "¿Qué serie tiene el récord de más premios Emmy ganados?",
+    "options": ["Breaking Bad", "Game of Thrones", "Los Soprano", "The Crown"],
+    "correctAnswer": "Game of Thrones",
+    "category": "Entretenimiento",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d0"},
+    "question": "¿Qué criptomoneda fue la primera en crearse?",
+    "options": ["Ethereum", "Bitcoin", "Litecoin", "Dogecoin"],
+    "correctAnswer": "Bitcoin",
+    "category": "Tecnología",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d1"},
+    "question": "¿Qué artista tiene más oyentes mensuales en Spotify en 2025?",
+    "options": ["Bad Bunny", "Taylor Swift", "The Weeknd", "Drake"],
+    "correctAnswer": "Taylor Swift",
+    "category": "Música",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d2"},
+    "question": "¿Cuál es el lenguaje de programación más usado en 2025?",
+    "options": ["Python", "JavaScript", "Java", "C++"],
+    "correctAnswer": "Python",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d3"},
+    "question": "¿Qué red social se conoce como 'la red profesional'?",
+    "options": ["Facebook", "Instagram", "LinkedIn", "Twitter"],
+    "correctAnswer": "LinkedIn",
+    "category": "Tecnología",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d4"},
+    "question": "¿Qué aplicación de mensajería es la más usada globalmente en 2025?",
+    "options": ["WhatsApp", "Telegram", "Signal", "WeChat"],
+    "correctAnswer": "WhatsApp",
+    "category": "Tecnología",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d5"},
+    "question": "¿Qué equipo ganó la Champions League 2024?",
+    "options": ["Real Madrid", "Manchester City", "PSG", "Bayern Munich"],
+    "correctAnswer": "Manchester City",
+    "category": "Deportes",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d6"},
+    "question": "¿Cuál es el videojuego más vendido de todos los tiempos?",
+    "options": ["Minecraft", "GTA V", "Tetris", "Wii Sports"],
+    "correctAnswer": "Minecraft",
+    "category": "Videojuegos",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d7"},
+    "question": "¿Qué marca de teléfonos móviles vendió más unidades en 2024?",
+    "options": ["Apple", "Samsung", "Xiaomi", "Huawei"],
+    "correctAnswer": "Samsung",
+    "category": "Tecnología",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d8"},
+    "question": "¿Qué plataforma de streaming de video tiene más suscriptores en 2025?",
+    "options": ["Netflix", "Disney+", "Amazon Prime", "HBO Max"],
+    "correctAnswer": "Disney+",
+    "category": "Entretenimiento",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8d9"},
+    "question": "¿Cuál es el anime más visto de 2024?",
+    "options": ["One Piece", "Attack on Titan", "Demon Slayer", "Jujutsu Kaisen"],
+    "correctAnswer": "One Piece",
+    "category": "Entretenimiento",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e0"},
+    "question": "¿Qué red social es más popular entre la Generación Z?",
+    "options": ["Instagram", "TikTok", "Snapchat", "BeReal"],
+    "correctAnswer": "TikTok",
+    "category": "Tecnología",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e1"},
+    "question": "¿Cuál es la película más taquillera de la historia?",
+    "options": ["Avatar", "Avengers: Endgame", "Titanic", "Star Wars: El despertar de la fuerza"],
+    "correctAnswer": "Avatar",
+    "category": "Cine",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e2"},
+    "question": "¿Qué selección ganó el Mundial de Qatar 2022?",
+    "options": ["Francia", "Brasil", "Argentina", "Portugal"],
+    "correctAnswer": "Argentina",
+    "category": "Deportes",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e3"},
+    "question": "¿En qué ciudad se encuentran las cataratas del Niágara?",
+    "options": ["Toronto", "Nueva York", "Ontario", "Buffalo"],
+    "correctAnswer": "Ontario",
+    "category": "Geografía",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e4"},
+    "question": "¿Cuál es el grupo de K-pop más exitoso internacionalmente?",
+    "options": ["BTS", "BLACKPINK", "EXO", "TWICE"],
+    "correctAnswer": "BTS",
+    "category": "Música",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e5"},
+    "question": "¿Qué famoso youtuber español tiene más suscriptores?",
+    "options": ["ElRubius", "Vegetta777", "AuronPlay", "Ibai"],
+    "correctAnswer": "ElRubius",
+    "category": "Entretenimiento",
+    "difficulty": "media",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e6"},
+    "question": "¿Cuál es el deporte más practicado en el mundo?",
+    "options": ["Fútbol", "Baloncesto", "Cricket", "Tenis"],
+    "correctAnswer": "Fútbol",
+    "category": "Deportes",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  },
+  {
+    "_id": {"$oid": "681b3596198a35f3a252d8e7"},
+    "question": "¿Qué actor interpretó a Tony Stark/Iron Man en el UCM?",
+    "options": ["Chris Evans", "Chris Hemsworth", "Robert Downey Jr.", "Mark Ruffalo"],
+    "correctAnswer": "Robert Downey Jr.",
+    "category": "Cine",
+    "difficulty": "fácil",
+    "__v": {"$numberInt": "0"}
+  }
+]
