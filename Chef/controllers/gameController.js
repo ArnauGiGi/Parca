@@ -10,7 +10,7 @@ exports.createGame = async (req, res) => {
     const code = Math.random().toString(36).substr(2, 6).toUpperCase();
 
     const total = await Question.countDocuments();
-    const count = Math.min(10, total);
+    const count = Math.min(100, total);
     const randomSkip = Array.from({ length: count }, () => Math.floor(Math.random() * total));
     const questions = await Promise.all(
       randomSkip.map(skip =>

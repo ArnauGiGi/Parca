@@ -19,7 +19,17 @@ export default function Game() {
   const [turnUserId, setTurnUserId] = useState(null);
   const [lives, setLives] = useState({});
   const [answering, setAnswering] = useState(false);
+  const [gameStartTime, setGameStartTime] = useState(null);
+  const [deathOrder, setDeathOrder] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [toast, setToast] = useState({ message: '', visible: false, isSuccess: false });
+
+  const showToast = (message, isSuccess = false) => {
+    setToast({ message, visible: true, isSuccess });
+    setTimeout(() => {
+      setToast({ message: '', visible: false, isSuccess: false });
+    }, 3000);
+  };
 
   const socketRef = useRef(null);
 
@@ -27,22 +37,32 @@ export default function Game() {
     const sock = initSocket();
     socketRef.current = sock;
 
-    // LISTENERS
-    sock.on('roomData', data => setRoomData(data));
+    sock.on('roomData', data => {
+      console.log("Room data updated:", data);
+      setRoomData(data);
+    });
 
     sock.on('gameStarted', ({ question, turnUserId, lives }) => {
       setGameStarted(true);
+      setGameStartTime(Date.now());
       setQuestion(question);
       setTurnUserId(turnUserId);
       setLives(lives);
       setAnswering(true);
     });
 
+    sock.on('playerEliminated', ({ userId, username }) => {
+      const timeEliminated = Math.floor((Date.now() - gameStartTime) / 1000);
+      console.log("Player eliminated:", { userId, username, timeEliminated });
+      setDeathOrder(prev => [...prev, { userId, username, timeEliminated }]);
+    });
+
+
     sock.on('answerResult', ({ userId, username, answer, correct, correctAnswer, lives }) => {
-      // Mostrar feedback global
-      alert(`${username} respondió “${answer}” – ${correct ? '✅ Correcto' : `❌ Incorrecto (res. correcta: ${correctAnswer})`}`);
+      showToast(`${username} respondió "${answer}" – ${correct ? '✅ Correcto' : `❌ Incorrecto (res. correcta: ${correctAnswer})`}`, correct);
       setLives(lives);
     });
+
 
     sock.on('nextTurn', ({ question, turnUserId, lives }) => {
       setQuestion(question);
@@ -52,9 +72,29 @@ export default function Game() {
     });
 
     sock.on('gameEnded', ({ winner }) => {
-      const winnerName = roomData.players.find(p => p.userId === winner)?.username;
-      alert(winnerName === username ? '¡Ganaste!' : `Fin del juego. Ganador: ${winnerName}`);
-      navigate('/lobby');
+
+      console.log("Game ended:", winner);
+      
+      const duration = Math.floor((Date.now() - gameStartTime) / 1000);
+      
+      console.log("Game ended:", {
+        winner: winner,
+        duration,
+        deathOrder,
+        players: roomData.players
+      });
+    
+      navigate('/game-summary', {
+        state: {
+          winner: winner,
+          duration,
+          deathOrder: deathOrder.length > 0 ? deathOrder : [],
+          gameStats: {
+            totalPlayers: roomData.players.length
+          }
+        },
+        replace: true
+      });
     });
 
     sock.on('errorMessage', msg => setErrorMsg(msg));
@@ -149,6 +189,17 @@ export default function Game() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-6">
+      {toast.visible && (
+        <div className="fixed top-4 right-4 z-50 animate-fade-in-down">
+          <div className={`px-6 py-3 rounded-lg shadow-lg border ${
+            toast.isSuccess 
+              ? 'bg-green-800/90 border-green-500/50 text-green-100' 
+              : 'bg-red-800/90 border-red-500/50 text-red-100'
+          }`}>
+            <p className="text-sm">{toast.message}</p>
+          </div>
+        </div>
+      )}
       <h2 className="room-code text-center mb-8">
         Sala: {code}
       </h2>

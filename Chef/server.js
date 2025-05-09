@@ -136,7 +136,7 @@ io.on('connection', socket => {
     }
 
     //Cargar 10 preguntas
-    const picks = await Question.aggregate([{ $sample: { size: 10 } }]);
+    const picks = await Question.aggregate([{ $sample: { size: 100 } }]);
     room.questions = picks;
     room.currentQ  = 0;
     
@@ -178,13 +178,21 @@ io.on('connection', socket => {
   
     // Eliminar de turno si sin vidas
     if (room.lives[userId] <= 0) {
-      room.turnOrder.splice(room.turnIndex, 1);
-      room.turnIndex--; // compensar avance
+      io.to(code).emit('playerEliminated', {
+        userId,
+        username: socket.username
+      });
+      room.turnOrder = room.turnOrder.filter(id => id !== userId);
+      room.turnIndex = room.turnIndex % room.turnOrder.length;
     }
   
-    // Comprobar fin de juego
     if (room.turnOrder.length === 1) {
-      return io.to(code).emit('gameEnded', { winner: room.turnOrder[0] });
+      // El último jugador es el ganador
+      const winner = room.players.find(p => p.userId === room.turnOrder[0]);
+      console.log("Winner:", winner); // Debug
+      io.to(code).emit('gameEnded', { winner });
+      delete rooms[code];
+      return;
     }
   
     // Avanzar turno y pregunta

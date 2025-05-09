@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
 import { login } from '../api/auth';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,9 +17,15 @@ export default function Login() {
     e.preventDefault();
     try {
       const { user } = await login(form);
-      sessionStorage.setItem('userId',   user.id);
+      
+      // Guardar en sessionStorage
+      sessionStorage.setItem('userId', user.id);
       sessionStorage.setItem('username', user.username);
-      console.log('✅ Usuario logueado:', user);
+      
+      // Actualizar el contexto
+      setUser(user);
+      
+      // Navegar al lobby
       navigate('/lobby');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');
@@ -54,10 +62,7 @@ export default function Login() {
             className="input-field w-full"
           />
         </div>
-        <button
-          type="submit"
-          className="button-primary w-full"
-        >
+        <button type="submit" className="button-primary w-full">
           Entrar
         </button>
         <p className="mt-4 text-center text-sm">

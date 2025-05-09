@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGame, joinGame } from '../api/game';
+import { logout } from '../api/auth';
 
 export default function Lobby() {
   const [codeInput, setCodeInput] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const handleCreate = async () => {
     setError('');
@@ -38,9 +40,31 @@ export default function Lobby() {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Limpiar estado
+      setUser(null);
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('username');
+      navigate('/login');
+    } catch (err) {
+      setError('Error al cerrar sesión');
+    }
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
-      <div className="glass-card max-w-md w-full p-8 rounded-xl">
+      <div className="glass-card max-w-md w-full p-8 rounded-xl relative">
+        {/* Botón de logout en la esquina superior derecha */}
+        <button
+          onClick={handleLogout}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white 
+                     transition-colors duration-300 text-sm"
+        >
+          Cerrar Sesión
+        </button>
+
         <h2 className="text-3xl font-bold text-white mb-6">Lobby</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <button

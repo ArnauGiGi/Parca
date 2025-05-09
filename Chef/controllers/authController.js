@@ -6,17 +6,17 @@ const jwt = require('jsonwebtoken');
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
   try {
-    // 1) ¿Existe ya el usuario?
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: 'Usuario ya existe' });
 
-    // 2) Hashear contraseña
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    // 3) Crear usuario
     user = new User({ username, email, password: passwordHash });
     await user.save();
+    
+    // Añadir respuesta exitosa
+    res.status(201).json({ message: 'Usuario registrado con éxito' });
 
   } catch (err) {
     console.error(err);
