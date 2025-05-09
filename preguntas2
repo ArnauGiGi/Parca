@@ -1,0 +1,849 @@
+[
+  {
+    "question": "¿Qué red social introdujo los 'Stories' por primera vez?",
+    "options": ["Instagram", "TikTok", "Facebook", "Snapchat"],
+    "correctAnswer": "Snapchat",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Cuál es el país con más medallas olímpicas en la historia?",
+    "options": ["China", "Rusia", "Estados Unidos", "Alemania"],
+    "correctAnswer": "Estados Unidos",
+    "category": "Deportes",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué científico formuló la teoría de la relatividad?",
+    "options": ["Isaac Newton", "Stephen Hawking", "Albert Einstein", "Nikola Tesla"],
+    "correctAnswer": "Albert Einstein",
+    "category": "Ciencia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Cuál es el metal líquido a temperatura ambiente?",
+    "options": ["Aluminio", "Plomo", "Oro", "Mercurio"],
+    "correctAnswer": "Mercurio",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué artista lanzó el álbum 'Midnights' en 2022?",
+    "options": ["Billie Eilish", "Ariana Grande", "Taylor Swift", "Dua Lipa"],
+    "correctAnswer": "Taylor Swift",
+    "category": "Música",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿En qué país se originó el sushi?",
+    "options": ["Corea del Sur", "China", "Tailandia", "Japón"],
+    "correctAnswer": "Japón",
+    "category": "Cultura",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué planeta es conocido como 'el planeta rojo'?",
+    "options": ["Venus", "Saturno", "Júpiter", "Marte"],
+    "correctAnswer": "Marte",
+    "category": "Astronomía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué filósofo escribió 'El contrato social'?",
+    "options": ["Voltaire", "John Locke", "Jean-Jacques Rousseau", "Kant"],
+    "correctAnswer": "Jean-Jacques Rousseau",
+    "category": "Filosofía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Cuál es el órgano más grande del cuerpo humano?",
+    "options": ["Hígado", "Cerebro", "Piel", "Corazón"],
+    "correctAnswer": "Piel",
+    "category": "Biología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué compañía creó el primer ordenador cuántico comercial?",
+    "options": ["IBM", "Google", "Intel", "D-Wave"],
+    "correctAnswer": "D-Wave",
+    "category": "Tecnología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué elemento químico tiene el símbolo 'Au'?",
+    "options": ["Plata", "Mercurio", "Hierro", "Oro"],
+    "correctAnswer": "Oro",
+    "category": "Ciencia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿En qué año se fundó la ONU?",
+    "options": ["1942", "1939", "1950", "1945"],
+    "correctAnswer": "1945",
+    "category": "Historia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué escritor creó a 'Sherlock Holmes'?",
+    "options": ["Agatha Christie", "Arthur Conan Doyle", "Edgar Allan Poe", "Charles Dickens"],
+    "correctAnswer": "Arthur Conan Doyle",
+    "category": "Literatura",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene forma de bota en el mapa?",
+    "options": ["Grecia", "Francia", "España", "Italia"],
+    "correctAnswer": "Italia",
+    "category": "Geografía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Cuál es la moneda oficial de Japón?",
+    "options": ["Won", "Yen", "Dólar", "Euro"],
+    "correctAnswer": "Yen",
+    "category": "Economía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué filósofo dijo 'Solo sé que no sé nada'?",
+    "options": ["Aristóteles", "Platón", "Sócrates", "Descartes"],
+    "correctAnswer": "Sócrates",
+    "category": "Filosofía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué deporte se juega en Wimbledon?",
+    "options": ["Fútbol", "Críquet", "Golf", "Tenis"],
+    "correctAnswer": "Tenis",
+    "category": "Deportes",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué artista pintó 'La última cena'?",
+    "options": ["Miguel Ángel", "Caravaggio", "Rafael", "Leonardo da Vinci"],
+    "correctAnswer": "Leonardo da Vinci",
+    "category": "Arte",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué planeta tiene anillos visibles?",
+    "options": ["Marte", "Venus", "Saturno", "Urano"],
+    "correctAnswer": "Saturno",
+    "category": "Astronomía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué científico descubrió la penicilina?",
+    "options": ["Louis Pasteur", "Alexander Fleming", "Marie Curie", "Isaac Newton"],
+    "correctAnswer": "Alexander Fleming",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país es el mayor productor de café?",
+    "options": ["Colombia", "Brasil", "Vietnam", "Etiopía"],
+    "correctAnswer": "Brasil",
+    "category": "Cultura",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué instrumento usa un djembé?",
+    "options": ["Percusión", "Cuerda", "Viento", "Eléctrico"],
+    "correctAnswer": "Percusión",
+    "category": "Música",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué sustancia regula el metabolismo?",
+    "options": ["Insulina", "Tiroxina", "Adrenalina", "Hemoglobina"],
+    "correctAnswer": "Tiroxina",
+    "category": "Biología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué marca lanzó el primer iPhone?",
+    "options": ["Samsung", "Nokia", "Apple", "BlackBerry"],
+    "correctAnswer": "Apple",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país alberga la Torre Eiffel?",
+    "options": ["Italia", "Alemania", "Francia", "España"],
+    "correctAnswer": "Francia",
+    "category": "Geografía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Quién escribió 'Don Quijote de la Mancha'?",
+    "options": ["Gabriel García Márquez", "Miguel de Cervantes", "Pablo Neruda", "Federico García Lorca"],
+    "correctAnswer": "Miguel de Cervantes",
+    "category": "Literatura",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué líder indio promovió la resistencia no violenta?",
+    "options": ["Nelson Mandela", "Mahatma Gandhi", "Martin Luther King", "Dalái Lama"],
+    "correctAnswer": "Mahatma Gandhi",
+    "category": "Historia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Cuál es el país más frío del mundo?",
+    "options": ["Canadá", "Rusia", "Finlandia", "Islandia"],
+    "correctAnswer": "Rusia",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué gas emiten las plantas durante la fotosíntesis?",
+    "options": ["Dióxido de carbono", "Oxígeno", "Nitrógeno", "Metano"],
+    "correctAnswer": "Oxígeno",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué premio se otorga por logros en matemáticas?",
+    "options": ["Nobel", "Fields", "Pulitzer", "Oscar"],
+    "correctAnswer": "Fields",
+    "category": "Ciencia",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué artista es conocido por sus 'latas de sopa Campbell'?",
+    "options": ["Andy Warhol", "Pablo Picasso", "Jackson Pollock", "Roy Lichtenstein"],
+    "correctAnswer": "Andy Warhol",
+    "category": "Arte",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país tiene la bandera roja con una estrella amarilla?",
+    "options": ["China", "Vietnam", "Corea del Norte", "Cuba"],
+    "correctAnswer": "Vietnam",
+    "category": "Geografía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué órgano produce insulina?",
+    "options": ["Hígado", "Páncreas", "Riñón", "Estómago"],
+    "correctAnswer": "Páncreas",
+    "category": "Biología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué filósofo escribió 'Así habló Zaratustra'?",
+    "options": ["Kant", "Nietzsche", "Hegel", "Marx"],
+    "correctAnswer": "Nietzsche",
+    "category": "Filosofía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué significa la sigla 'URL'?",
+    "options": ["Universal Resource Locator", "Uniform Resource Locator", "Unified Request Link", "Universal Redirect Link"],
+    "correctAnswer": "Uniform Resource Locator",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué tipo de energía genera el Sol?",
+    "options": ["Nuclear de fisión", "Geotérmica", "Nuclear de fusión", "Química"],
+    "correctAnswer": "Nuclear de fusión",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué civilización construyó Machu Picchu?",
+    "options": ["Azteca", "Maya", "Inca", "Olmeca"],
+    "correctAnswer": "Inca",
+    "category": "Historia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene tres capitales oficiales?",
+    "options": ["Suiza", "Sudáfrica", "Chile", "Australia"],
+    "correctAnswer": "Sudáfrica",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué escritor español perteneció a la Generación del 27?",
+    "options": ["Federico García Lorca", "Miguel de Unamuno", "Camilo José Cela", "Arturo Pérez-Reverte"],
+    "correctAnswer": "Federico García Lorca",
+    "category": "Literatura",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué movimiento artístico lideró Salvador Dalí?",
+    "options": ["Cubismo", "Surrealismo", "Impresionismo", "Expresionismo"],
+    "correctAnswer": "Surrealismo",
+    "category": "Arte",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué vitamina se sintetiza con la exposición solar?",
+    "options": ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina K"],
+    "correctAnswer": "Vitamina D",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué glándula controla el ritmo circadiano?",
+    "options": ["Tiroides", "Pineal", "Hipófisis", "Suprarrenal"],
+    "correctAnswer": "Pineal",
+    "category": "Biología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué deporte practicaba Michael Phelps?",
+    "options": ["Ciclismo", "Natación", "Atletismo", "Esquí"],
+    "correctAnswer": "Natación",
+    "category": "Deportes",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué plataforma lanzó el primer 'reel'?",
+    "options": ["TikTok", "Instagram", "Snapchat", "Triller"],
+    "correctAnswer": "Instagram",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país no usa el euro como moneda?",
+    "options": ["Alemania", "Polonia", "Francia", "España"],
+    "correctAnswer": "Polonia",
+    "category": "Economía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Quién fue el primer presidente negro de Sudáfrica?",
+    "options": ["Thabo Mbeki", "Nelson Mandela", "Jacob Zuma", "Cyril Ramaphosa"],
+    "correctAnswer": "Nelson Mandela",
+    "category": "Historia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué partícula tiene carga positiva?",
+    "options": ["Electrón", "Protón", "Neutrón", "Fotón"],
+    "correctAnswer": "Protón",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué unidad mide la presión atmosférica?",
+    "options": ["Pascal", "Newton", "Julio", "Vatio"],
+    "correctAnswer": "Pascal",
+    "category": "Física",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué gas es principal responsable del efecto invernadero?",
+    "options": ["Metano", "Dióxido de carbono", "Óxido nitroso", "Ozono"],
+    "correctAnswer": "Dióxido de carbono",
+    "category": "Ecología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué porcentaje de agua dulce existe en la Tierra?",
+    "options": ["1%", "2.5%", "5%", "10%"],
+    "correctAnswer": "2.5%",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué psicólogo propuso la teoría del desarrollo cognitivo?",
+    "options": ["Freud", "Piaget", "Pavlov", "Maslow"],
+    "correctAnswer": "Piaget",
+    "category": "Psicología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país tiene la esperanza de vida más alta?",
+    "options": ["Japón", "Suiza", "Singapur", "España"],
+    "correctAnswer": "Japón",
+    "category": "Sociedad",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Cuál es el punto más profundo del océano?",
+    "options": ["Fosa de las Marianas", "Fosa de Tonga", "Fosa de Puerto Rico", "Fosa de Java"],
+    "correctAnswer": "Fosa de las Marianas",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué filósofo escribió 'El ser y la nada'?",
+    "options": ["Heidegger", "Sartre", "Nietzsche", "Kierkegaard"],
+    "correctAnswer": "Sartre",
+    "category": "Filosofía",
+    "difficulty": "difícil"
+  },
+    {
+    "question": "¿Qué empresa desarrolló el modelo de IA 'ChatGPT'?",
+    "options": ["Google", "OpenAI", "Meta", "Microsoft"],
+    "correctAnswer": "OpenAI",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Cuál es el país con más husos horarios?",
+    "options": ["Rusia", "Estados Unidos", "China", "Francia"],
+    "correctAnswer": "Francia",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué deporte incluye el término 'checkmate'?",
+    "options": ["Boxeo", "Ajedrez", "Esgrima", "Hockey"],
+    "correctAnswer": "Ajedrez",
+    "category": "Deportes",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué gas usan las plantas para la fotosíntesis?",
+    "options": ["Oxígeno", "Nitrógeno", "Dióxido de carbono", "Hidrógeno"],
+    "correctAnswer": "Dióxido de carbono",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Quién pintó 'El jardín de las delicias'?",
+    "options": ["El Bosco", "Velázquez", "Goya", "Durero"],
+    "correctAnswer": "El Bosco",
+    "category": "Arte",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué app permite compartir pantalla en videollamadas?",
+    "options": ["Zoom", "WhatsApp", "Discord", "Todas las anteriores"],
+    "correctAnswer": "Todas las anteriores",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué científico propuso la teoría del Big Bang?",
+    "options": ["Stephen Hawking", "Albert Einstein", "Georges Lemaître", "Edwin Hubble"],
+    "correctAnswer": "Georges Lemaître",
+    "category": "Ciencia",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Cuál es el metal más ligero?",
+    "options": ["Aluminio", "Litio", "Magnesio", "Berilio"],
+    "correctAnswer": "Litio",
+    "category": "Química",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué significa 'www' en las URLs?",
+    "options": ["World Wide Web", "Web World Wide", "World Web Window", "Wide World Web"],
+    "correctAnswer": "World Wide Web",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿En qué año se lanzó Windows 11?",
+    "options": ["2019", "2020", "2021", "2022"],
+    "correctAnswer": "2021",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué instrumento mide la presión arterial?",
+    "options": ["Termómetro", "Estetoscopio", "Esfigmomanómetro", "Oximetro"],
+    "correctAnswer": "Esfigmomanómetro",
+    "category": "Medicina",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué filósofo dijo 'Pienso, luego existo'?",
+    "options": ["Kant", "Descartes", "Nietzsche", "Sócrates"],
+    "correctAnswer": "Descartes",
+    "category": "Filosofía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país no es miembro permanente del Consejo de Seguridad de la ONU?",
+    "options": ["Francia", "India", "China", "Rusia"],
+    "correctAnswer": "India",
+    "category": "Política",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué artista grabó el álbum 'Renaissance' en 2022?",
+    "options": ["Beyoncé", "Taylor Swift", "Rihanna", "Lady Gaga"],
+    "correctAnswer": "Beyoncé",
+    "category": "Música",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué nave espacial llegó a Plutón en 2015?",
+    "options": ["Voyager 1", "New Horizons", "Cassini", "Curiosity"],
+    "correctAnswer": "New Horizons",
+    "category": "Astronomía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué red social usa 'hashtags' como elemento central?",
+    "options": ["Facebook", "Twitter/X", "Instagram", "Todas"],
+    "correctAnswer": "Todas",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué vitamina previene el escorbuto?",
+    "options": ["Vitamina A", "Vitamina C", "Vitamina D", "Vitamina K"],
+    "correctAnswer": "Vitamina C",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene la mayor reserva de agua dulce?",
+    "options": ["Canadá", "Rusia", "Brasil", "Estados Unidos"],
+    "correctAnswer": "Brasil",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué deporte incluye el movimiento 'smash'?",
+    "options": ["Tenis", "Bádminton", "Voleibol", "Todos"],
+    "correctAnswer": "Todos",
+    "category": "Deportes",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué animal es el símbolo de la WWF?",
+    "options": ["Oso polar", "Tigre", "Panda gigante", "Elefante"],
+    "correctAnswer": "Panda gigante",
+    "category": "Ecología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país inventó el papel moneda?",
+    "options": ["Grecia", "China", "India", "Egipto"],
+    "correctAnswer": "China",
+    "category": "Historia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué CEO tecnológico compró Twitter en 2022?",
+    "options": ["Mark Zuckerberg", "Elon Musk", "Jeff Bezos", "Satya Nadella"],
+    "correctAnswer": "Elon Musk",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué planeta tiene el día más corto?",
+    "options": ["Marte", "Júpiter", "Venus", "Mercurio"],
+    "correctAnswer": "Júpiter",
+    "category": "Astronomía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué país lidera la producción de energía eólica (2024)?",
+    "options": ["China", "EEUU", "Alemania", "India"],
+    "correctAnswer": "China",
+    "category": "Ecología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué artista tiene el récord de más streams en Spotify en un día?",
+    "options": ["Bad Bunny", "Taylor Swift", "The Weeknd", "Drake"],
+    "correctAnswer": "Bad Bunny",
+    "category": "Música",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué compañía desarrolla el chip M3 para Mac?",
+    "options": ["Intel", "AMD", "Apple", "NVIDIA"],
+    "correctAnswer": "Apple",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué significa 'NFT' en el ámbito digital?",
+    "options": ["Non-Fungible Token", "Network File Transfer", "New Financial Technology", "Next-Gen File Type"],
+    "correctAnswer": "Non-Fungible Token",
+    "category": "Tecnología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué vitamina ayuda a la absorción del calcio?",
+    "options": ["Vitamina A", "Vitamina D", "Vitamina B12", "Vitamina K"],
+    "correctAnswer": "Vitamina D",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué planeta tiene vientos de 2,000 km/h?",
+    "options": ["Júpiter", "Neptuno", "Saturno", "Venus"],
+    "correctAnswer": "Neptuno",
+    "category": "Astronomía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué país europeo tiene 4 idiomas oficiales?",
+    "options": ["Suiza", "Bélgica", "Luxemburgo", "Finlandia"],
+    "correctAnswer": "Suiza",
+    "category": "Geografía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué inteligencia AI generó polémica por aprobar exámenes médicos?",
+    "options": ["ChatGPT-4", "Med-PaLM", "Watson Health", "DeepMind"],
+    "correctAnswer": "Med-PaLM",
+    "category": "Tecnología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué elemento es crucial para las baterías de coches eléctricos?",
+    "options": ["Litio", "Plomo", "Aluminio", "Cobre"],
+    "correctAnswer": "Litio",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué deporte incluye el término 'hat-trick'?",
+    "options": ["Fútbol", "Rugby", "Hockey", "Todos"],
+    "correctAnswer": "Todos",
+    "category": "Deportes",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué empresa creó el primer vehículo autónomo nivel 5?",
+    "options": ["Tesla", "Waymo", "Cruise", "Uber"],
+    "correctAnswer": "Waymo",
+    "category": "Tecnología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué protocolo garantiza la privacidad en navegadores web?",
+    "options": ["HTTP", "HTTPS", "FTP", "TCP/IP"],
+    "correctAnswer": "HTTPS",
+    "category": "Tecnología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué porcentaje de especies marinas quedan por descubrir?",
+    "options": ["30%", "50%", "70%", "90%"],
+    "correctAnswer": "90%",
+    "category": "Biología",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué órgano humano se regenera completamente cada 2 semanas?",
+    "options": ["Piel", "Hígado", "Estómago", "Corazón"],
+    "correctAnswer": "Piel",
+    "category": "Biología",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país no fue parte del Pacto de Varsovia?",
+    "options": ["Polonia", "Yugoslavia", "Hungría", "RDA"],
+    "correctAnswer": "Yugoslavia",
+    "category": "Historia",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué conflicto inició en 2014 con la anexión de Crimea?",
+    "options": ["Guerra de Donbás", "Primavera Árabe", "Guerra de Nagorno-Karabaj", "Invasión de Ucrania"],
+    "correctAnswer": "Guerra de Donbás",
+    "category": "Historia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país tiene más Patrimonios de la Humanidad UNESCO?",
+    "options": ["China", "Italia", "España", "Francia"],
+    "correctAnswer": "Italia",
+    "category": "Cultura",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué escritor ganó el Nobel de Literatura en 2022?",
+    "options": ["Annie Ernaux", "Jon Fosse", "Abdulrazak Gurnah", "Louise Glück"],
+    "correctAnswer": "Annie Ernaux",
+    "category": "Literatura",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué deporte incluye el término 'ollie'?",
+    "options": ["Surf", "Skateboard", "Snowboard", "BMX"],
+    "correctAnswer": "Skateboard",
+    "category": "Deportes",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué atleta tiene el récord de 100m lisos (9.58 segundos)?",
+    "options": ["Usain Bolt", "Tyson Gay", "Asafa Powell", "Yohan Blake"],
+    "correctAnswer": "Usain Bolt",
+    "category": "Deportes",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene la menor brecha salarial de género (2024)?",
+    "options": ["Islandia", "Finlandia", "Noruega", "Nueva Zelanda"],
+    "correctAnswer": "Islandia",
+    "category": "Sociedad",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué artista es famoso por cortar su propia oreja?",
+    "options": ["Pablo Picasso", "Vincent van Gogh", "Salvador Dalí", "Claude Monet"],
+    "correctAnswer": "Vincent van Gogh",
+    "category": "Arte",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué hueso protege el cerebro?",
+    "options": ["Fémur", "Costillas", "Cráneo", "Húmero"],
+    "correctAnswer": "Cráneo",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿En qué país se encuentra la Torre de Pisa?",
+    "options": ["Francia", "España", "Italia", "Grecia"],
+    "correctAnswer": "Italia",
+    "category": "Geografía",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué instrumento mide la fuerza del viento?",
+    "options": ["Barómetro", "Anemómetro", "Termómetro", "Sismógrafo"],
+    "correctAnswer": "Anemómetro",
+    "category": "Ciencia",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué escritor creó a Harry Potter?",
+    "options": ["J.R.R. Tolkien", "George R.R. Martin", "J.K. Rowling", "Stephen King"],
+    "correctAnswer": "J.K. Rowling",
+    "category": "Literatura",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué elemento químico tiene el símbolo 'O'?",
+    "options": ["Oro", "Osmio", "Oxígeno", "Oganesón"],
+    "correctAnswer": "Oxígeno",
+    "category": "Química",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué deporte se juega en el Super Bowl?",
+    "options": ["Béisbol", "Fútbol americano", "Baloncesto", "Rugby"],
+    "correctAnswer": "Fútbol americano",
+    "category": "Deportes",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué científico descubrió la gravedad?",
+    "options": ["Albert Einstein", "Isaac Newton", "Galileo Galilei", "Nikola Tesla"],
+    "correctAnswer": "Isaac Newton",
+    "category": "Ciencia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué película ganó el Oscar a Mejor Película en 2023?",
+    "options": ["Everything Everywhere All at Once", "The Fabelmans", "Elvis", "Top Gun: Maverick"],
+    "correctAnswer": "Everything Everywhere All at Once",
+    "category": "Cine",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué plataforma lanzó la serie 'Stranger Things'?",
+    "options": ["HBO Max", "Netflix", "Disney+", "Prime Video"],
+    "correctAnswer": "Netflix",
+    "category": "Entretenimiento",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene el código telefónico +44?",
+    "options": ["Estados Unidos", "Australia", "Reino Unido", "Canadá"],
+    "correctAnswer": "Reino Unido",
+    "category": "Geografía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué planeta tiene el volcán más grande del sistema solar (Olympus Mons)?",
+    "options": ["Marte", "Venus", "Júpiter", "Saturno"],
+    "correctAnswer": "Marte",
+    "category": "Astronomía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué artista pintó 'El nacimiento de Venus'?",
+    "options": ["Miguel Ángel", "Leonardo da Vinci", "Sandro Botticelli", "Rafael"],
+    "correctAnswer": "Sandro Botticelli",
+    "category": "Arte",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué órgano produce bilis?",
+    "options": ["Páncreas", "Estómago", "Hígado", "Vesícula biliar"],
+    "correctAnswer": "Hígado",
+    "category": "Biología",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿En qué país se encuentra el desierto de Atacama?",
+    "options": ["Argentina", "Perú", "Chile", "Bolivia"],
+    "correctAnswer": "Chile",
+    "category": "Geografía",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué escritor creó el personaje de 'Don Juan Tenorio'?",
+    "options": ["Lope de Vega", "Calderón de la Barca", "José Zorrilla", "Miguel de Cervantes"],
+    "correctAnswer": "José Zorrilla",
+    "category": "Literatura",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué instrumento usaba principalmente Louis Armstrong?",
+    "options": ["Saxofón", "Trombón", "Trompeta", "Clarinete"],
+    "correctAnswer": "Trompeta",
+    "category": "Música",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué elemento tiene el símbolo químico 'Ag'?",
+    "options": ["Oro", "Plata", "Argón", "Mercurio"],
+    "correctAnswer": "Plata",
+    "category": "Química",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué país ganó el Mundial de Fútbol Femenino 2023?",
+    "options": ["Estados Unidos", "España", "Inglaterra", "Alemania"],
+    "correctAnswer": "España",
+    "category": "Deportes",
+    "difficulty": "media"
+  },
+  {
+    "question": "¿Qué científico propuso la teoría de la evolución?",
+    "options": ["Louis Pasteur", "Charles Darwin", "Gregor Mendel", "Isaac Newton"],
+    "correctAnswer": "Charles Darwin",
+    "category": "Ciencia",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué plataforma lanzó la serie 'The Mandalorian'?",
+    "options": ["Netflix", "Disney+", "HBO Max", "Prime Video"],
+    "correctAnswer": "Disney+",
+    "category": "Entretenimiento",
+    "difficulty": "fácil"
+  },
+  {
+    "question": "¿Qué país tiene forma de cuerno en el mapa?",
+    "options": ["Somalia", "Etiopía", "Sudán", "Kenia"],
+    "correctAnswer": "Somalia",
+    "category": "Geografía",
+    "difficulty": "difícil"
+  },
+  {
+    "question": "¿Qué pintor noruego creó 'El Grito'?",
+    "options": ["Edvard Munch", "Vincent van Gogh", "Paul Gauguin", "Henri Matisse"],
+    "correctAnswer": "Edvard Munch",
+    "category": "Arte",
+    "difficulty": "media"
+  }
+]

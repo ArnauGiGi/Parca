@@ -57,11 +57,8 @@ io.use((socket, next) => {
 const rooms = {}; // code → { host, hostUserId, players, pendingRemovals }
 
 io.on('connection', socket => {
-  console.log(`🔌 Conectado: ${socket.id} (userId=${socket.userId})`);
 
-  // Crear sala
   socket.on('createRoom', (payload, ack) => {
-    console.log("crearSala");
     const { code } = payload;
     rooms[code] = {
       host:         socket.id,
@@ -104,17 +101,12 @@ io.on('connection', socket => {
       });
     }
     socket.join(code);
-    console.log('Sala', code, 'hostUserId=', rooms[code].hostUserId, 'players=', rooms[code].players);
 
-    // 1) Envía por ack el estado completo de la sala
     ack(room);
   
-    // 2) Publica a todos el objeto sala completo
     io.to(code).emit('roomData', room);
   });
   
-
-  // Toggle Ready
   socket.on('playerReady', ({ code }) => {
     const room = rooms[code];
     if (!room) return;
@@ -135,8 +127,8 @@ io.on('connection', socket => {
       return socket.emit('errorMessage', 'Todos deben estar listos');
     }
 
-    //Cargar 10 preguntas
-    const picks = await Question.aggregate([{ $sample: { size: 100 } }]);
+    //Cargar 1000 preguntas
+    const picks = await Question.aggregate([{ $sample: { size: 1000 } }]);
     room.questions = picks;
     room.currentQ  = 0;
     
@@ -146,7 +138,8 @@ io.on('connection', socket => {
     room.turnIndex = 0;
     room.turnOrder.forEach(id => room.lives[id] = 4);
 
-    //iniciar partida
+    room.startTime = Date.now(); // Guardamos el timestamp en milisegundos
+    
     io.to(code).emit('gameStarted', {
       question: picks[0],
       turnUserId: room.turnOrder[0],
@@ -187,10 +180,13 @@ io.on('connection', socket => {
     }
   
     if (room.turnOrder.length === 1) {
-      // El último jugador es el ganador
       const winner = room.players.find(p => p.userId === room.turnOrder[0]);
-      console.log("Winner:", winner); // Debug
-      io.to(code).emit('gameEnded', { winner });
+      const duration = Math.round((Date.now() - room.startTime) / 1000); // Convertimos a segundos
+      
+      io.to(code).emit('gameEnded', { 
+        winner,
+        duration  // Enviamos directamente la duración en segundos
+      });
       delete rooms[code];
       return;
     }
@@ -205,6 +201,12 @@ io.on('connection', socket => {
       turnUserId: nextUser,
       lives: room.lives
     });
+  });
+
+  socket.on('playerEliminated', ({ userId, username }) => {
+    const currentTime = Math.floor(Date.now() / 1000);
+    const timeEliminated = currentTime - room.startTime;
+    setDeathOrder(prev => [...prev, { userId, username, timeEliminated }]);
   });
 
   // Desconexión con grace period
@@ -240,14 +242,12 @@ io.on('connection', socket => {
           { $pull: { players: leaver.userId } }
         );
       }, 2500);
-      console.log(`⏳ ${leaver.username} se ha desconectado. Esperando ${timeout}ms para eliminar...`);
       room.pendingRemovals.set(leaver.userId, timeout);
     });
   });
 
   // Salir voluntario
   socket.on('leaveRoom', async ({ code }) => {
-    console.log("🚪 Salir de sala:", code);
     const room = rooms[code];
     if (!room) return;
     room.players = room.players.filter(p => p.userId !== socket.userId);

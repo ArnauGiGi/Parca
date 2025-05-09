@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createGame, joinGame } from '../api/game';
 import { logout } from '../api/auth';
+import { useUser } from '../contexts/UserContext';
 
 export default function Lobby() {
   const [codeInput, setCodeInput] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
 
   const handleCreate = async () => {
     setError('');
-    console.log('📡 POST a createGame…');
     try {
       const { code } = await createGame();
       navigate(`/game/${code}`, { state: { isHost: true } });
@@ -43,7 +43,6 @@ export default function Lobby() {
   const handleLogout = async () => {
     try {
       await logout();
-      // Limpiar estado
       setUser(null);
       sessionStorage.removeItem('userId');
       sessionStorage.removeItem('username');
@@ -56,14 +55,25 @@ export default function Lobby() {
   return (
     <div className="flex items-center justify-center min-h-screen p-4">
       <div className="glass-card max-w-md w-full p-8 rounded-xl relative">
-        {/* Botón de logout en la esquina superior derecha */}
-        <button
-          onClick={handleLogout}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white 
-                     transition-colors duration-300 text-sm"
-        >
-          Cerrar Sesión
-        </button>
+        {/* Header con botones de navegación */}
+        <div className="absolute top-4 right-4 flex gap-4">
+          {user?.role === 'admin' && (
+            <button
+              onClick={() => navigate('/admin')}
+              className="text-blue-400 hover:text-blue-300 
+                        transition-colors duration-300 text-sm"
+            >
+              Panel Admin
+            </button>
+          )}
+          <button
+            onClick={handleLogout}
+            className="text-gray-400 hover:text-white 
+                      transition-colors duration-300 text-sm"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
 
         <h2 className="text-3xl font-bold text-white mb-6">Lobby</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}

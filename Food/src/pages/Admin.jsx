@@ -39,9 +39,18 @@ export default function Admin() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <div className='text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-1/3 background-opacity'>
-        <h2 className="text-2xl mb-4">Panel de Administración</h2>
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <div className='text-white p-6 rounded shadow-[0px_2px_13px_-3px_rgba(255,_255,_255,_1)] w-full max-w-1/3 background-opacity relative'>
+        {/* Botón de volver al lobby */}
+        <button
+          onClick={() => navigate('/lobby')}
+          className="absolute top-4 left-4 text-gray-400 hover:text-white 
+                    transition-colors duration-300 text-sm"
+        >
+          ← Volver al Lobby
+        </button>
+
+        <h2 className="text-2xl mb-4 mt-8">Panel de Administración</h2>
         {error && <p className="text-red-500 mb-2">{error}</p>}
         {success && <p className="text-green-500 mb-2">{success}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">

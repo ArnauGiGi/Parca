@@ -25,7 +25,6 @@ exports.createGame = async (req, res) => {
       questions: questions.map(q => q._id)
     });
     await game.save();
-    console.log('Partida creada:', game._id);
     res.status(201).json({ gameId: game._id, code });
   } catch (err) {
     console.error(err);

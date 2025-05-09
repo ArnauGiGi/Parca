@@ -18,11 +18,13 @@ export default function Game() {
   const [question, setQuestion] = useState(null);
   const [turnUserId, setTurnUserId] = useState(null);
   const [lives, setLives] = useState({});
+  const [correctAnswers, setCorrectAnswers] = useState(0);
   const [answering, setAnswering] = useState(false);
   const [gameStartTime, setGameStartTime] = useState(null);
   const [deathOrder, setDeathOrder] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [toast, setToast] = useState({ message: '', visible: false, isSuccess: false });
+  const correctAnswersRef = useRef(0);
 
   const showToast = (message, isSuccess = false) => {
     setToast({ message, visible: true, isSuccess });
@@ -38,13 +40,12 @@ export default function Game() {
     socketRef.current = sock;
 
     sock.on('roomData', data => {
-      console.log("Room data updated:", data);
       setRoomData(data);
     });
 
-    sock.on('gameStarted', ({ question, turnUserId, lives }) => {
+    sock.on('gameStarted', ({ question, turnUserId, lives, startTime }) => {
       setGameStarted(true);
-      setGameStartTime(Date.now());
+      setGameStartTime(startTime);
       setQuestion(question);
       setTurnUserId(turnUserId);
       setLives(lives);
@@ -53,16 +54,21 @@ export default function Game() {
 
     sock.on('playerEliminated', ({ userId, username }) => {
       const timeEliminated = Math.floor((Date.now() - gameStartTime) / 1000);
-      console.log("Player eliminated:", { userId, username, timeEliminated });
       setDeathOrder(prev => [...prev, { userId, username, timeEliminated }]);
     });
-
 
     sock.on('answerResult', ({ userId, username, answer, correct, correctAnswer, lives }) => {
       showToast(`${username} respondió "${answer}" – ${correct ? '✅ Correcto' : `❌ Incorrecto (res. correcta: ${correctAnswer})`}`, correct);
       setLives(lives);
+      if (correct && userId === myUserId) {
+        setCorrectAnswers(prev => {
+          const newCount = prev + 1;
+          correctAnswersRef.current = newCount; // Guardar en ref
+          console.log('Respuesta correcta! Nuevo total:', newCount);
+          return newCount;
+        });
+      }
     });
-
 
     sock.on('nextTurn', ({ question, turnUserId, lives }) => {
       setQuestion(question);
@@ -71,26 +77,19 @@ export default function Game() {
       setAnswering(true);
     });
 
-    sock.on('gameEnded', ({ winner }) => {
-
-      console.log("Game ended:", winner);
+    sock.on('gameEnded', ({ winner, duration }) => {
+      const finalCorrectAnswers = correctAnswersRef.current; // Usar el valor de la ref
+      console.log('Enviando estadísticas finales. Respuestas correctas:', finalCorrectAnswers);
       
-      const duration = Math.floor((Date.now() - gameStartTime) / 1000);
-      
-      console.log("Game ended:", {
-        winner: winner,
-        duration,
-        deathOrder,
-        players: roomData.players
-      });
-    
       navigate('/game-summary', {
         state: {
-          winner: winner,
+          winner,
           duration,
           deathOrder: deathOrder.length > 0 ? deathOrder : [],
           gameStats: {
-            totalPlayers: roomData.players.length
+            totalPlayers: roomData.players.length,
+            correctAnswers: finalCorrectAnswers,
+            myUserId
           }
         },
         replace: true
