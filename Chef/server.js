@@ -66,6 +66,7 @@ io.on('connection', socket => {
       players:      [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }],
       pendingRemovals: new Map(),
       questions: [],       
+      messages: [],
       currentQ: 0,          
       lives: {},           
       turnOrder: [],       
@@ -145,6 +146,26 @@ io.on('connection', socket => {
       turnUserId: room.turnOrder[0],
       lives: room.lives
     });
+  });
+
+  socket.on('sendMessage', ({ code, message }) => {
+    const room = rooms[code];
+    if (!room) return;
+
+    const messageData = {
+      userId: socket.userId,
+      username: socket.username,
+      message,
+      timestamp: Date.now()
+    };
+
+    room.messages.push(messageData);
+    // Mantener solo los últimos 50 mensajes
+    if (room.messages.length > 50) {
+      room.messages.shift();
+    }
+
+    io.to(code).emit('newMessage', messageData);
   });
 
   socket.on('submitAnswer', ({ code, answer }) => {

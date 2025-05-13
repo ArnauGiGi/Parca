@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { initSocket } from '../services/socket';
 import Question from '../components/Question';
+import GameChat from '../components/GameChat';
 
 export default function Game() {
   const { code } = useParams();
@@ -23,6 +24,7 @@ export default function Game() {
   const [gameStartTime, setGameStartTime] = useState(null);
   const [deathOrder, setDeathOrder] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [messages, setMessages] = useState([]);
   const [toast, setToast] = useState({ message: '', visible: false, isSuccess: false });
   const correctAnswersRef = useRef(0);
 
@@ -51,6 +53,10 @@ export default function Game() {
       setLives(lives);
       setAnswering(true);
     });
+
+      sock.on('newMessage', (messageData) => {
+        setMessages(prev => [...prev, messageData]);
+      });
 
     sock.on('playerEliminated', ({ userId, username }) => {
       const timeEliminated = Math.floor((Date.now() - gameStartTime) / 1000);
@@ -130,6 +136,10 @@ export default function Game() {
     socketRef.current.emit('leaveRoom', { code });
     socketRef.current.disconnect();
     navigate('/lobby');
+  };
+
+  const sendMessage = (message) => {
+    socketRef.current.emit('sendMessage', { code, message });
   };
 
   const { players, hostUserId } = roomData;
@@ -235,6 +245,11 @@ export default function Game() {
                         underline text-shadow">
         Salir de la sala
       </button>
+      <GameChat 
+        onSendMessage={sendMessage}
+        messages={messages}
+        myUserId={myUserId}
+      />
     </div>
   );
 }

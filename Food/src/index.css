@@ -171,3 +171,21 @@ body {
            bg-gradient-to-r from-purple-600 to-blue-500
            px-6 py-2 rounded-lg inline-block;
   }
+
+  /* Añadir al final del archivo */
+.messages-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
