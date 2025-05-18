@@ -17,3 +17,21 @@ exports.createQuestion = async (req, res) => {
     res.status(500).json({ message: 'Error creando pregunta' });
   }
 };
+
+exports.getQuestions = async (req, res) => {
+  try {
+    const questions = await Question.find();
+    res.json(questions);
+  } catch (err) {
+    res.status(500).json({ message: 'Error al obtener preguntas' });
+  }
+};
+
+exports.deleteQuestion = async (req, res) => {
+  try {
+    await Question.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Pregunta eliminada con éxito' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error al eliminar pregunta' });
+  }
+};

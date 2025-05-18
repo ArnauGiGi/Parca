@@ -12,6 +12,7 @@ const Question     = require('./models/Question');
 const authRoutes      = require('./routes/authRoutes');
 const gameRoutes      = require('./routes/gameRoutes');
 const questionRoutes  = require('./routes/questionRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.use(cors({
@@ -25,6 +26,7 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/questions', questionRoutes);
+app.use('/api/users', userRoutes);
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
