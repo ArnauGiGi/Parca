@@ -13,12 +13,14 @@ const authRoutes      = require('./routes/authRoutes');
 const gameRoutes      = require('./routes/gameRoutes');
 const questionRoutes  = require('./routes/questionRoutes');
 const userRoutes = require('./routes/userRoutes');
+const emailRoutes = require('./routes/emailRoutes');
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
+  origin: 'http://parca.local',
+  credentials: true,
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 connectDB();
@@ -27,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/questions', questionRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/email', emailRoutes);
 
 const server = http.createServer(app);
 const { Server } = require('socket.io');
@@ -34,9 +37,12 @@ const cookie = require('cookie');
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
-    credentials: true
-  }
+    origin: 'http://parca.local',
+    methods: ['GET', 'POST'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+  },
+  path: '/socket.io'
 });
 
 // Auth middleware para sockets, extrayendo cookie HTTP‑Only
@@ -59,54 +65,79 @@ io.use((socket, next) => {
 const rooms = {}; // code → { host, hostUserId, players, pendingRemovals }
 
 io.on('connection', socket => {
+console.log('Cliente conectado:', socket.id);
 
-  socket.on('createRoom', (payload, ack) => {
-    const { code } = payload;
-    rooms[code] = {
-      host:         socket.id,
-      hostUserId:   socket.userId,
-      players:      [{ socketId: socket.id, userId: socket.userId, username: socket.username, ready: false }],
-      pendingRemovals: new Map(),
-      questions: [],       
-      messages: [],
-      currentQ: 0,          
-      lives: {},           
-      turnOrder: [],       
-      turnIndex: 0    
-    };
-    socket.join(code);
-    ack(rooms[code]);
-    io.to(code).emit('roomData', rooms[code]);
+  socket.on('createRoom', async (payload, ack) => {
+    try {
+      const { code } = payload;
+      console.log('Creando sala:', code, 'por usuario:', socket.username);
+      
+      rooms[code] = {
+        host: socket.id,
+        hostUserId: socket.userId,
+        players: [{
+          socketId: socket.id,
+          userId: socket.userId,
+          username: socket.username,
+          ready: false
+        }],
+        pendingRemovals: new Map(),
+        messages: [],
+        questions: [], 
+        currentQ: 0,
+        lives: {},
+        turnOrder: [],
+        turnIndex: 0
+      };
+
+      await socket.join(code);
+      console.log('Sala creada:', rooms[code]);
+      
+      if (typeof ack === 'function') {
+        ack(rooms[code]);
+      }
+      
+      io.to(code).emit('roomData', rooms[code]);
+    } catch (error) {
+      console.error('Error al crear sala:', error);
+      if (typeof ack === 'function') {
+        ack({ error: 'Error al crear sala' });
+      }
+    }
   });
 
   // Unirse a sala
-  socket.on('joinRoom', (payload, ack) => {
+  socket.on('joinRoom', async (payload, ack) => {
     const { code } = payload;
+    console.log('Intentando unirse a sala:', code, 'usuario:', socket.username);
+    
     const room = rooms[code];
-    if (room && room.pendingRemovals.has(socket.userId)) {
-      clearTimeout(room.pendingRemovals.get(socket.userId));
-      room.pendingRemovals.delete(socket.userId);
-    }
     if (!room) {
-      socket.emit('errorMessage', 'La sala no existe');
-      return;
+      console.log('Sala no encontrada:', code);
+      return socket.emit('errorMessage', 'La sala no existe');
     }
-    // Usa socket.username (del JWT) en lugar de payload.username
-    const existing = room.players.find(p => p.userId === socket.userId);
-    if (existing) {
-      existing.socketId = socket.id;
+
+    const existingPlayer = room.players.find(p => p.userId === socket.userId);
+    if (existingPlayer) {
+      console.log('Jugador reconectado:', socket.username);
+      existingPlayer.socketId = socket.id;
     } else {
+      console.log('Nuevo jugador:', socket.username);
       room.players.push({
         socketId: socket.id,
-        userId:   socket.userId,
+        userId: socket.userId,
         username: socket.username,
-        ready:    false
+        ready: false
       });
     }
-    socket.join(code);
 
-    ack(room);
-  
+    await socket.join(code);
+    console.log('Estado actual de la sala:', room);
+    
+    if (typeof ack === 'function') {
+      ack(room);
+    }
+    
     io.to(code).emit('roomData', room);
   });
   

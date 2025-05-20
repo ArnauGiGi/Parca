@@ -41,8 +41,13 @@ export default function Game() {
     const sock = initSocket();
     socketRef.current = sock;
 
+    console.log('Iniciando conexión socket...');
+
     sock.on('roomData', data => {
-      setRoomData(data);
+      console.log('Recibiendo actualización de sala:', data);
+      if (data && Array.isArray(data.players)) {
+        setRoomData(data);
+      }
     });
 
     sock.on('gameStarted', ({ question, turnUserId, lives, startTime }) => {
@@ -54,9 +59,9 @@ export default function Game() {
       setAnswering(true);
     });
 
-      sock.on('newMessage', (messageData) => {
-        setMessages(prev => [...prev, messageData]);
-      });
+    sock.on('newMessage', (messageData) => {
+      setMessages(prev => [...prev, messageData]);
+    });
 
     sock.on('playerEliminated', ({ userId, username }) => {
       const timeEliminated = Math.floor((Date.now() - gameStartTime) / 1000);
@@ -102,27 +107,40 @@ export default function Game() {
       });
     });
 
-    sock.on('errorMessage', msg => setErrorMsg(msg));
+    sock.on('errorMessage', message => {
+      console.error('Error recibido:', message);
+      setErrorMsg(message);
+    });
 
-    // EMIT CREATE/JOIN
     sock.on('connect', () => {
+      console.log('Socket conectado, uniendo a sala:', code);
       if (initialHostRef.current) {
-        sock.emit('createRoom', { code, username }, data => {
-          setRoomData(data);
-          initialHostRef.current = false;
+        sock.emit('createRoom', { code }, (response) => {
+          console.log('Sala creada:', response);
+          setRoomData(response);
         });
       } else {
-        sock.emit('joinRoom', { code, username }, data => {
-          setRoomData(data);
+        sock.emit('joinRoom', { code }, (response) => {
+          console.log('Unido a sala:', response);
+          setRoomData(response);
         });
       }
     });
 
+
     return () => {
-      sock.off();
-      sock.disconnect();
+      if (socketRef.current) {
+        console.log('Desconectando socket...');
+        socketRef.current.emit('leaveRoom', { code });
+        socketRef.current.disconnect();
+      }
     };
   }, [code, navigate, location.pathname]);
+
+  useEffect(() => {
+    console.log('RoomData actualizado:', roomData);
+    console.log('Jugadores actuales:', roomData.players);
+  }, [roomData]);
 
   // Handlers
   const toggleReady = () => socketRef.current.emit('playerReady', { code });
@@ -144,6 +162,7 @@ export default function Game() {
 
   const { players, hostUserId } = roomData;
   const amIHost = hostUserId === myUserId;
+  console.log('Jugadores:', players);
 
   // RENDER
   if (!gameStarted) {

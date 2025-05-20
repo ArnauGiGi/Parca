@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { sendGameSummary } from '../api/email';
 
 export default function GameSummary() {
   const location = useLocation();
@@ -8,6 +9,32 @@ export default function GameSummary() {
   const myUserId = sessionStorage.getItem('userId');
   const myUsername = sessionStorage.getItem('username');
   const didIWin = winner?.userId === myUserId;
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [email, setEmail] = useState('');
+  const [emailStatus, setEmailStatus] = useState({ type: '', message: '' });
+
+  const handleSendEmail = async (e) => {
+    e.preventDefault();
+    setEmailStatus({ type: 'info', message: 'Enviando...' });
+    
+    try {
+      await sendGameSummary(email, {
+        didIWin,
+        username: myUsername,
+        correctAnswers: gameStats?.correctAnswers ?? 0,
+        winner: winner.username,
+        duration: formatDuration(duration)
+      });
+      
+      setEmailStatus({ type: 'success', message: '¡Email enviado correctamente!' });
+      setTimeout(() => setShowEmailModal(false), 2000);
+    } catch (err) {
+      setEmailStatus({ 
+        type: 'error', 
+        message: 'Error al enviar el email. Inténtalo de nuevo.' 
+      });
+    }
+  };
 
   useEffect(() => {
     console.log('GameStats recibidos:', gameStats);
@@ -90,6 +117,59 @@ export default function GameSummary() {
                   </span>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* Botón para abrir modal de email */}
+        <button
+          onClick={() => setShowEmailModal(true)}
+          className="button-secondary text-lg px-8 py-3 mr-4"
+        >
+          Enviar Resumen por Email
+        </button>
+
+        {/* Modal de Email */}
+        {showEmailModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <div className="glass-card p-6 rounded-xl max-w-md w-full">
+              <h3 className="text-xl text-white mb-4">Enviar Resumen por Email</h3>
+              <form onSubmit={handleSendEmail}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Introduce tu email"
+                  className="input-field w-full mb-4"
+                  required
+                />
+                
+                {emailStatus.message && (
+                  <p className={`mb-4 ${
+                    emailStatus.type === 'error' ? 'text-red-400' :
+                    emailStatus.type === 'success' ? 'text-green-400' :
+                    'text-blue-400'
+                  }`}>
+                    {emailStatus.message}
+                  </p>
+                )}
+
+                <div className="flex gap-4">
+                  <button
+                    type="submit"
+                    className="button-primary flex-1"
+                  >
+                    Enviar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowEmailModal(false)}
+                    className="button-secondary flex-1"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
