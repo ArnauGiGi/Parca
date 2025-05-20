@@ -6,8 +6,6 @@ const auth = require('../middleware/authMiddleware');
 
 router.post('/send-summary', auth, async (req, res) => {
   const { email, gameData } = req.body;
-  console.log('Received email:', email);
-  console.log('Received gameData:', gameData);
   if (!email || !gameData) {
     return res.status(400).json({ 
       success: false, 
@@ -28,7 +26,6 @@ router.post('/send-summary', auth, async (req, res) => {
 
     pythonProcess.stdout.on('data', (data) => {
       outputData += data.toString();
-      console.log('Python output:', data.toString());
     });
 
     pythonProcess.stderr.on('data', (data) => {

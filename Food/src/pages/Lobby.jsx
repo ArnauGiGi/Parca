@@ -16,7 +16,7 @@ export default function Lobby() {
       const { code } = await createGame();
       navigate(`/game/${code}`, { state: { isHost: true } });
     } catch (err) {
-      console.error('🚨 createGame Error:', err);
+      console.error('createGame Error:', err);
       setError(
         err.response?.data?.message ||
         err.message ||
@@ -31,7 +31,7 @@ export default function Lobby() {
       await joinGame(codeInput);
       navigate(`/game/${codeInput}`);
     } catch (err) {
-      console.error('🚨 joinGame Error:', err);
+      console.error('joinGame Error:', err);
       setError(
         err.response?.data?.message ||
         err.message ||

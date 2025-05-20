@@ -41,10 +41,7 @@ export default function Game() {
     const sock = initSocket();
     socketRef.current = sock;
 
-    console.log('Iniciando conexión socket...');
-
     sock.on('roomData', data => {
-      console.log('Recibiendo actualización de sala:', data);
       if (data && Array.isArray(data.players)) {
         setRoomData(data);
       }
@@ -74,8 +71,7 @@ export default function Game() {
       if (correct && userId === myUserId) {
         setCorrectAnswers(prev => {
           const newCount = prev + 1;
-          correctAnswersRef.current = newCount; // Guardar en ref
-          console.log('Respuesta correcta! Nuevo total:', newCount);
+          correctAnswersRef.current = newCount;
           return newCount;
         });
       }
@@ -90,8 +86,7 @@ export default function Game() {
 
     sock.on('gameEnded', ({ winner, duration }) => {
       const finalCorrectAnswers = correctAnswersRef.current; // Usar el valor de la ref
-      console.log('Enviando estadísticas finales. Respuestas correctas:', finalCorrectAnswers);
-      
+
       navigate('/game-summary', {
         state: {
           winner,
@@ -113,15 +108,12 @@ export default function Game() {
     });
 
     sock.on('connect', () => {
-      console.log('Socket conectado, uniendo a sala:', code);
       if (initialHostRef.current) {
         sock.emit('createRoom', { code }, (response) => {
-          console.log('Sala creada:', response);
           setRoomData(response);
         });
       } else {
         sock.emit('joinRoom', { code }, (response) => {
-          console.log('Unido a sala:', response);
           setRoomData(response);
         });
       }
@@ -130,17 +122,13 @@ export default function Game() {
 
     return () => {
       if (socketRef.current) {
-        console.log('Desconectando socket...');
         socketRef.current.emit('leaveRoom', { code });
+        socketRef.current.off(); // Limpia todos los listeners
         socketRef.current.disconnect();
+        socketRef.current = null; // <-- IMPORTANTE: limpiar la referencia
       }
     };
   }, [code, navigate, location.pathname]);
-
-  useEffect(() => {
-    console.log('RoomData actualizado:', roomData);
-    console.log('Jugadores actuales:', roomData.players);
-  }, [roomData]);
 
   // Handlers
   const toggleReady = () => socketRef.current.emit('playerReady', { code });
@@ -162,7 +150,6 @@ export default function Game() {
 
   const { players, hostUserId } = roomData;
   const amIHost = hostUserId === myUserId;
-  console.log('Jugadores:', players);
 
   // RENDER
   if (!gameStarted) {

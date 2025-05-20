@@ -14,7 +14,6 @@ async function seedAdmin() {
     password: hash,
     role: 'admin'
   });
-  console.log('Admin creado');
   process.exit();
 }
 
